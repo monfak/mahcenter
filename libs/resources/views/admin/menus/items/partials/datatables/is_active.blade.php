@@ -1,0 +1,1 @@
+<span class="label label-{{ ($item->is_active ? 'success' : 'warning') }}">{{ $item->is_active ? 'فعال' : 'غیرفعال' }}</span>

@@ -1,0 +1,1 @@
+{{ jdate($faq->created_at)->format('d F Y') }}

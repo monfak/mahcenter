@@ -1,0 +1,1 @@
+{{ number_format($user->wallet, 0) }} تومان

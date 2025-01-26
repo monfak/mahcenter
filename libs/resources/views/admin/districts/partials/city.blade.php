@@ -1,0 +1,1 @@
+{{ $district->city->name }}

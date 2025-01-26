@@ -1,0 +1,1 @@
+{{ jdate($redirect->created_at)->format('d F Y') }}

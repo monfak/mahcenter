@@ -1,1 +1,0 @@
-{{ $cart->user?->mobile ?? $cart->mobile }}

@@ -1,1 +1,0 @@
-<span class="label label-{{ ($faq->is_active ? 'success' : 'warning') }}">{{ $faq->is_active ? 'نمایش در سوالات متداول' : 'عدم نمایش در سوالات متداول' }}</span>

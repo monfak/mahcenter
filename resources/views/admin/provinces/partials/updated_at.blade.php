@@ -1,1 +1,0 @@
-{{ jdate($province->updated_at)->format('d F Y ساعت H:i') }}

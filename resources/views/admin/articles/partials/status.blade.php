@@ -1,1 +1,0 @@
-<span class="label label-{{ ($article->status ? 'success' : 'warning') }}">{{ $article->status ? 'منتشر شده' : 'پیش‌نویس' }}</span>

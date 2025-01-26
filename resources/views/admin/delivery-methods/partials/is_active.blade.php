@@ -1,1 +1,0 @@
-<span class="label label-{{ ($deliveryMethod->is_active ? 'success' : 'warning') }}">{{ $deliveryMethod->is_active ? 'فعال' : 'غیرفعال' }}</span>

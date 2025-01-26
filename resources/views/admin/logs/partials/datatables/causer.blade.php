@@ -1,1 +1,0 @@
-{{ $log->causer ? $log->causer->name : '' }}

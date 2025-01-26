@@ -1,1 +1,0 @@
-<span class="label label-{{ ($paymentMethod->is_active ? 'success' : 'warning') }}">{{ $paymentMethod->is_active ? 'فعال' : 'غیرفعال' }}</span>

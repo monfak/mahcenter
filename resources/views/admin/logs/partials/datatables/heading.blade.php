@@ -1,1 +1,0 @@
-{{ $log->subject->heading ?? $log->subject->name ?? $log->subject->title ?? '' }}

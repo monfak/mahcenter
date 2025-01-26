@@ -1,0 +1,1 @@
+{{ $order->user?->first_name ?? $order->first_name }}

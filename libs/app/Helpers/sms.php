@@ -12,5 +12,7 @@ if (!function_exists('send_sms')) {
             $params[] = new \Cryptommer\Smsir\Objects\Parameters($index, $value);
         }
         $send->Verify($mobile, $templateId, $params);
+
+        return $send;
     }
 }

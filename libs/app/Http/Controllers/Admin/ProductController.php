@@ -36,7 +36,7 @@ use Sms;
 class ProductController extends Controller
 {
     protected $activityLogService;
-    
+
     /**
      * ProductController constructor.
      */
@@ -45,7 +45,7 @@ class ProductController extends Controller
         $this->middleware('permission:products-manage');
         $this->activityLogService = $activityLogService;
     }
-    
+
     public function index()
     {
            $categories = Category::orderBy('parent_id')->get();
@@ -55,7 +55,7 @@ class ProductController extends Controller
     public function ajax($category,$quantity)
     {
         if($category == 0) {
-            $products = DB::table('products')->select('products.id', 'products.image', 'products.created_at', 'products.updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status');
+            $products = DB::table('products')->select('products.id', 'products.image', 'products.created_at', 'products.updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status','products.dev_title');
             if($quantity == 1) {
                 $products = $products ->where('stock', '!=', 0);
             } else if($quantity == 2) {
@@ -245,19 +245,19 @@ class ProductController extends Controller
         if ($request->filled('min_stock')) {
             $productsQuery->where('stock', '>=', $request->input('min_stock'));
         }
-    
+
         if ($request->filled('max_stock')) {
             $productsQuery->where('stock', '<=', $request->input('max_stock'));
         }
-    
+
         if ($request->filled('min_price')) {
             $productsQuery->where('price', '>=', $request->input('min_price'));
         }
-    
+
         if ($request->filled('max_price')) {
             $productsQuery->where('price', '<=', $request->input('max_price'));
         }
-    
+
         if ($request->has('status') && $request->input('status') !== '' && $request->input('status') !== null) {
             $productsQuery->where('status', $request->input('status'));
         }
@@ -574,7 +574,6 @@ class ProductController extends Controller
     {
         $log = $this->activityLogService->init('محصول', 'updated')->prepare($product, 'old');
         $notify = !$product->stock && $request->stock >= 1;
-        
         $fields = [
             'name', 'label', 'variety_label', 'variety_value', 'slug', 'alt',
             'description', 'title', 'meta_description', 'manufacturer_id',
@@ -595,7 +594,7 @@ class ProductController extends Controller
         $product->required_national_id = $request->input('required_national_id', false);
         $product->is_festival = $request->input('is_festival', false);
         $product->is_available = $request->input('is_available', false);
-        
+
         if ($request->input('special')) {
             $product->special = $request->input('special');
             $product->discount = (int) round(100 - $request->input('special') * 100 / $request->input('price'));
@@ -603,23 +602,27 @@ class ProductController extends Controller
             $product->special = null;
             $product->discount = null;
         }
-        
+
         if ($request->input('colleague_price')) {
             $product->colleague_price = $request->input('colleague_price');
         }
-        
+
         if ($request->hasFile('image')) {
             $product->image = $this->uploadImage($request->file('image'), 'products');
         }
-        
+
         $product->twitter_image = $this->updateOptionalImage($request, 'twitter_image', 'products');
         $product->og_image = $this->updateOptionalImage($request, 'og_image', 'products');
-        $product->catalogue = $this->updateOptionalImage($request, 'catalogue', 'products/catalogue');
 
         if ($request->input('remove_catalogue')) {
             $product->catalogue = null;
+            $product->catalogue_name = null;
         }
-       
+        else
+        {
+            $product->catalogue = $this->updateOptionalImage($request, 'catalogue', 'products/catalogue');
+        }
+
         $product->save();
 
         $relations = [
@@ -654,7 +657,7 @@ class ProductController extends Controller
         success("محصول {$product->name} آپدیت شد.");
         return redirect()->route('admin.products.index');
     }
-    
+
     /**
      * Upload image
      *
@@ -831,14 +834,14 @@ class ProductController extends Controller
                 $productData['image'] = 'storage/images/products/' . date('Y/m') . '/' . $name . '.' . $request->image->getClientOriginalExtension();
             }
         }
-        
+
         if ($request->hasFile('og_image')) {
             $name = pathinfo($request->og_image->getClientOriginalName(), PATHINFO_FILENAME);
             if ($request->og_image->storeAs('public/images/products/' . date('Y/m'), $name . '.' . $request->og_image->getClientOriginalExtension())) {
                 $productData['og_image'] = 'storage/images/products/' . date('Y/m') . '/' . $name . '.' . $request->og_image->getClientOriginalExtension();
             }
         }
-        
+
         if ($request->hasFile('twitter_image')) {
             $name = pathinfo($request->twitter_image->getClientOriginalName(), PATHINFO_FILENAME);
             if ($request->twitter_image->storeAs('public/images/products/' . date('Y/m'), $name . '.' . $request->twitter_image->getClientOriginalExtension())) {
@@ -922,7 +925,7 @@ class ProductController extends Controller
                 ]);
             }
         }
-        
+
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -931,7 +934,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index');
     }
-    
+
     /**
      * Add note to an order.
      * @param Request $request
@@ -959,7 +962,7 @@ class ProductController extends Controller
         }
         return redirect()->back();
     }
-    
+
     public function updatePrice(Request $request, Product $product)
     {
         if ($product) {
@@ -975,7 +978,7 @@ class ProductController extends Controller
         }
         return response()->json(['success' => false]);
     }
-    
+
     public function updateStock(Request $request, Product $product)
     {
         if ($product) {
@@ -986,7 +989,7 @@ class ProductController extends Controller
         }
         return response()->json(['success' => false]);
     }
-    
+
     private function addAttributes($product)
     {
         $productAttributesIds = $product->attributes->pluck('id')->toArray();

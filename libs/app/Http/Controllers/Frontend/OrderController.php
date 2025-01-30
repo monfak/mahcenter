@@ -24,26 +24,34 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $cart = $this->cartService->getCart();
-        if (!$cart) {
+        if (!$cart)
+        {
             doneMessage('سبد خرید شما خالی است!');
+
             return redirect()->route('cart');
         }
         $address = $this->cartService->getAddress($cart);
-        if (!$address) {
+        if (!$address)
+        {
             doneMessage('باید حداقل یک آدرس داشته باشید!');
+
             return redirect()->route('frontend.details.index');
         }
 
         // Check if any product in the cart requires a national ID
         $requiresNationalId = false;
-        foreach ($cart->items as $cartItem) {
-            if ($cartItem->product->required_national_id) {
+        foreach ($cart->items as $cartItem)
+        {
+            if ($cartItem->product->required_national_id)
+            {
                 $requiresNationalId = true;
                 break;
             }
         }
-        if ($requiresNationalId && empty($request->input('national_code')) && false) {
+        if ($requiresNationalId && empty($request->input('national_code')) && false)
+        {
             error('فیلد کد ملی اجباری است!');
+
             return redirect()->route('checkout');
         }
         // Apply discount code logic (consider extracting this into a separate service if reusable)
@@ -62,35 +70,39 @@ class OrderController extends Controller
          * doneMessage('کد تخفیف معتبر نیست.', 'error');
          * return back()->withInput();
          * }**/
-        if (auth()->check()) {
+        if (auth()->check())
+        {
             $user = auth()->user();
             $userUpdates = array_filter([
-                'first_name' => $request->input('first_name', auth()->user()->first_name),
-                'last_name' => $request->input('last_name', auth()->user()->last_name),
-                'name' => trim($request->input('first_name', auth()->user()->first_name) . ' ' . $request->input('last_name', auth()->user()->last_name)),
+                'first_name'    => $request->input('first_name', auth()->user()->first_name),
+                'last_name'     => $request->input('last_name', auth()->user()->last_name),
+                'name'          => trim($request->input('first_name', auth()->user()->first_name) . ' ' . $request->input('last_name', auth()->user()->last_name)),
                 'national_code' => $request->input('national_code', auth()->user()->national_code),
             ]);
 
-            if (!empty($userUpdates)) {
+            if (!empty($userUpdates))
+            {
                 $user->update($userUpdates);
             }
         }
         //Order::whereUserId($user->id)->pending()->update(['status' => Order::STATUS_EXPIRED]);
 
         $orderData = [
-            'address_id' => $cart->address_id,
-            'description' => $request->input('description'),
-            'user_ip' => $request->getClientIp(),
-            'user_agent' => $request->header('User-Agent'),
-            'status' => Order::STATUS_PENDING,
+            'address_id'       => $cart->address_id,
+            'description'      => $request->input('description'),
+            'user_ip'          => $request->getClientIp(),
+            'user_agent'       => $request->header('User-Agent'),
+            'status'           => Order::STATUS_PENDING,
             'cash_on_delivery' => $request->input('paymethod') == 'delivery' ? Order::CASH_ON_DELIVARY : Order::PAY_ONLINE,
         ];
-        if (auth()->check()) {
+        if (auth()->check())
+        {
             $user = auth()->user();
             $orderData['mobile'] = $user->mobile;
             $orderData['user_id'] = $user->id;
             $orderData['tracking_code'] = uniqid($user->id);
-        } else {
+        } else
+        {
             $orderData['mobile'] = $cart->mobile;
             $orderData['first_name'] = $cart->first_name;
             $orderData['last_name'] = $cart->last_name;
@@ -104,24 +116,26 @@ class OrderController extends Controller
 
         $totalSum = 0;
         $orderProducts = [];
-        foreach ($cart->items as $cartItem) {
+        foreach ($cart->items as $cartItem)
+        {
             $product = $cartItem->product;
             $price = (int)($product->special ?? $product->price);
-            if ($cartItem->warranty_id) {
+            if ($cartItem->warranty_id)
+            {
                 $price += $cartItem->warranty->price;
             }
             $totalPrice = $price * $cartItem->quantity;
 
             $orderProducts[] = [
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'quantity' => $cartItem->quantity,
-                'price' => $price,
-                'warranty_id' => $cartItem->warranty_id,
-                'warranty_price' => $cartItem->warranty?->price ?? null,
-                'discount' => 0,
+                'order_id'         => $order->id,
+                'product_id'       => $product->id,
+                'quantity'         => $cartItem->quantity,
+                'price'            => $price,
+                'warranty_id'      => $cartItem->warranty_id,
+                'warranty_price'   => $cartItem->warranty?->price ?? null,
+                'discount'         => 0,
                 'discount_details' => null,
-                'total_price' => $totalPrice,
+                'total_price'      => $totalPrice,
             ];
 
             $totalSum += $totalPrice;
@@ -140,18 +154,19 @@ class OrderController extends Controller
         // Update order totals
         $order->update([
             'products_total_price' => $totalSum,
-            'total_price' => $totalSum,// - $totalDiscount,
-            'discount' => 0,//$totalDiscount,
+            'total_price'          => $totalSum,// - $totalDiscount,
+            'discount'             => 0,//$totalDiscount,
         ]);
 
         // Clear the cart
         $this->cartService->delete($cart);
         Log::info('Cart deleted for user ID: ' . $cart->user_id);
-
-        if ($order->cash_on_delivery) {
+        if ($order->cash_on_delivery)
+        {
             success('سفارش شما با موفقیت ثبت شد. منتظر تماس کارشناسان ما باشید.');
 
-            foreach ($order->products as $product) {
+            foreach ($order->products as $product)
+            {
                 $product->stock = max(0, $product->stock - $product->pivot->quantity);
                 $product->save();
             }
@@ -166,16 +181,29 @@ class OrderController extends Controller
              * session()->forget('codeId');
              * }**/
 
-            /**if($order->mobile) {
-             * try {
-             * send_sms($user->mobile, ['user' => $user->name ?? 'بدون نام', 'ordercode' => $order->id], 636222);
-             * } catch(\Exception $exception){
-             * Log::info('Error sending otp: ' . $exception);
-             * }
-             * }**/
+            if ($order->mobile)
+            {
+                try
+                {
+                    send_sms($order->mobile, ['user' => $user->name ?? 'بدون نام', 'ordercode' => $order->id], 636222);
+                } catch (\Exception $exception)
+                {
+                    Log::info('Error sending otp: ' . $exception);
+                }
+            }
+
             return redirect()->route('thankyou', $order->id);
         }
-
+        if ($order->mobile)
+        {
+            try
+            {
+                send_sms($order->mobile, ['user' => $user->name ?? 'بدون نام', 'ordercode' => $order->id], 636222);
+            } catch (\Exception $exception)
+            {
+                Log::info('Error sending otp: ' . $exception);
+            }
+        }
         Log::info('Redirecting to payment request for Order ID: ' . $order->id);
 
         /**if(auth()->user()->id == 2 && $request->input('paymethod') == "sadad")
@@ -189,6 +217,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::whereUserId(auth()->id())->latest()->paginate();
+
         return view('frontend.accounts.orders', compact('orders'));
     }
 
@@ -197,6 +226,7 @@ class OrderController extends Controller
         abort_unless($order->user_id == auth()->id(), 403);
         $order->load('products', 'payments', 'user', 'address.city.province');
         $address = $order->address;
+
         return view('frontend.accounts.order', compact('order', 'address'));
     }
 }

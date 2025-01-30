@@ -40,10 +40,10 @@
             });
             $('#products').select2({
                 placeholder : 'محصول را انتخاب کنید',
-            }); 
+            });
             $('#cross_products').select2({
                 placeholder : 'محصول را انتخاب کنید',
-            }); 
+            });
         });
         $(document).ready(function(){
             $('#add-image').click(function(e) {
@@ -57,7 +57,7 @@
                 	 @foreach($attributes as $key => $attribute)
                        html += '<option value="{{ $key }}">{{ $attribute }}</option>';
                       @endforeach
-                
+
                 	html += '    </select> </td>';
                 	  html += '    <td><input name="attribute_highlight[]" type="checkbox" value="1">   </td>';
                 	html += '  <td class="text-left" style="width: 20%;"> <textarea name="attribute_value[]" class="form-control"></textarea></td>';
@@ -142,7 +142,7 @@
                             asANumber = +withoutCommas;
                         $special.val(withoutCommas);
                     });
-                    
+
                     $colleagueMask.on("keyup", function(event) {
                         // When user select text in the document, also abort.
                         var selection = window.getSelection().toString();
@@ -420,7 +420,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                
+
                                     <div class="form-group hide">
                                         <label for="length" class="col-md-12 control-label mt-2">ابعاد (طول)</label>
                                         <div class="col-md-12">
@@ -676,7 +676,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @endif    
+                                        @endif
                                         </tbody>
                                         <tfoot>
                                         <tr>
@@ -708,18 +708,18 @@
                                                     </a>
                                             </div>
                                         </div>
-                                        
-                                        
+
+
                                           @unless(is_null($product->catalogue))
-                                            <div class="form-group">
-                                                <label for="remove_catalogue" class="col-md-2 control-label">حذف کاتالوگ</label>
-                                                <div class="col-md-10">
-                                                    <input type="checkbox" id="remove_catalogue" name="remove_catalogue">
-                                                </div>
-                                            </div>
+                                               <div class="form-group">
+                                                   <label class="checkbox-inline" for="remove_catalogue">
+                                                       <input type="checkbox" name="remove_catalogue" value="1" id="remove_catalogue">
+                                                       <span style="font-weight: bold;margin-right: 2rem">حذف کاتالوگ</span>
+                                                   </label>
+                                               </div>
                                         @endunless
-                                
-                                
+
+
                                         @endif
                                         <div class="form-group">
                                             <label for="catalogue" class="col-md-2 control-label">{{ ($product->catalogue ? 'تغییر کاتالوگ' : 'کاتالوگ') }}</label>
@@ -727,9 +727,9 @@
                                                 <input type="file" name="catalogue" id="catalogue" class="form-control">
                                             </div>
                                         </div>
-                   
+
                                     </div>
-                                    
+
                             </div>
                             <div class="clearfix"></div>
                             <!-- /.tab-content -->

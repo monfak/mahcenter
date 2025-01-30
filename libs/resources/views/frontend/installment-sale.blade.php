@@ -74,7 +74,9 @@
                     installment();
                 }
             });
-
+            function roundUp(amount, nearest) {
+                return Math.ceil(amount / nearest) * nearest;
+            }
             function installment() {
                 let totalAmount = $('#total_amount').val();
                 let percent = $('input[name="percent_price"]:checked').val();
@@ -87,6 +89,8 @@
                 let profit = balance * (month / 2) * (6 / 100);
                 let total = profit + balance;
                 let installment = total / month;
+                console.log('main installment is : '+installment)
+                installment = roundUp(installment,10000);
 
                 prepayment = formatNumberWithCommas(prepayment.toFixed(0));
                 installment = formatNumberWithCommas(installment.toFixed(0));

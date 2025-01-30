@@ -220,7 +220,7 @@
                 </div>
               </div>
               <div class="col-lg-3 col-md-4 pe-md-0 text-center">
-                  
+
               </div>
             </div>
           </div>
@@ -297,7 +297,10 @@
             <a href="{{ url('cart') }}" class="shop-link">
               <div class="icon-toolbar">
                 <span class="img-shop position-relative img-slice">
-                  <span class="itemsInBasket">{{ $itemsInBasket['quantity'] }}</span>
+                     <i class="bi bi-cart"></i> <!-- آیکون سبد خرید -->
+                      <span style="height: 20px" class="cartBadget badge rounded-pill bg-danger text-white position-absolute top-0 start-100 translate-middle">
+                        {{ $itemsInBasket['quantity'] }}
+                      </span>
                 </span>
               </div>
               <div class="d-block lbl-menu">سبد خرید</div>

@@ -46,7 +46,7 @@ $(document).ready(function() {
 				items: 4
 			}
 		}
-		
+
 	})
 });
 </script>
@@ -66,7 +66,7 @@ $(document).ready(function() {
     	                         </div>
     	                               <div class="text-center text-category mt-3 mb-3">{{ $child->name }}
     	                         </div>
-        	                  </a>      
+        	                  </a>
     	                 </div>
     	            @endforeach
     	        </div>
@@ -78,7 +78,7 @@ $(document).ready(function() {
 	                </div>
 	           </div>
 	       </div>
-	       
+
 	       <div class="row">
 	           <div class="col-12">
 	                <div class="P-Relatepro my-3">
@@ -113,12 +113,12 @@ $(document).ready(function() {
                                         </div>
                                     </div>
                                 </div>
-        	                @endforeach    
+        	                @endforeach
         	            </div>
 	                </div>
 	           </div>
 	       </div>
-	        
+
 	    </div>
 	</div>
 </div>

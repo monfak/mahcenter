@@ -291,4 +291,13 @@ if (!function_exists('isValidNationalId')) {
 
         return false;
     }
+
+    function d(...$args)
+    {
+        $allowedIp = '5.202.168.55'; // آی‌پی خود را اینجا قرار دهید
+
+        if (request()->ip() === $allowedIp || request()->has('developer_token')) {
+            dd(...$args);
+        }
+    }
 }

@@ -16,6 +16,33 @@
     <meta name="robots" content="nofollow">
 @endif
 @endsection
+@section('styles')
+    <style>
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .img-secondary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .image-wrapper:hover .img-secondary {
+            opacity: 1;
+        }
+
+        .image-wrapper:hover .img-primary {
+            opacity: 0;
+        }
+    </style>
+@endsection
 @section('scripts')
     <script src="/js/nouislider.min.js"></script>
     <script src="/js/wNumb.js"></script>
@@ -37,25 +64,25 @@
                 $('.manufacturer:checked').each(function () {
                     manufacturers.push($(this).val());
                 });
-    
+
                 var filters = [];
                 $('.filter_checkbox:checked').each(function() {
                     filters.push($(this).val());
                 });
-    
+
                 var filterLimit = $('#input-limit').val();
-    
+
                 var filterOrder = false;
                 $('.button_radio.filter').each(function () {
                     if( $(this).is(":checked") ) {
                         filterOrder = $(this).val();
                     }
                 });
-    
+
                 if($('#stock_status-param-1').prop('checked') == true){
                     var stockStatus = 1;
                 }
-    
+
                 $.ajax({
                     type: 'POST',
                       url: "{{ route('category.filter', ['category' => $category->slug]) }}" + '?page=' + page,
@@ -77,11 +104,11 @@
                     }
                 });
             }
-    
+
             $('.filter').change(function () {
                 filter();
             });
-    
+
             $('.filter-btn').click(function(){
                 filter();
             });
@@ -132,7 +159,7 @@
                 filter();
             });
         });
-    
+
     </script>
     <script>
 
@@ -142,8 +169,8 @@
         if (matchMedia('only screen and (max-width:767px)').matches) {
             $('#collapseTwo').removeClass('show');
         }
-        
-        
+
+
         ///اسکریپت نمایش بیشتر در لیست نام مجموعه ها///
         $('.c-catalog__list--depth').each(function(){
             var LiN = $(this).find('li').length;
@@ -421,7 +448,7 @@ function sticky_sidebar() {
                                                             <input type="checkbox" name="item" id="off_filter_part" >
                                                             <i></i>
                                                             <label class="filter-cation" for="off_filter_part">جستجو بر اساس برند</label>
-                                                         
+
                                                             <div class="options">
                                                                 <ul class="li-item ps-0">
                                                                     @foreach($category->manufacturers as $manufacturer)
@@ -437,14 +464,14 @@ function sticky_sidebar() {
                                                             </div>
                                                         </li>
                                                         @endif
-                                                        
-                                                        
+
+
                                                         @foreach($category->filtersWithOutBrandGroup as $group)
                                                         <li class="block cat-filter scroll close">
                                                             <input type="checkbox" name="item" id="off_filter_part{{$group->id}}" >
                                                             <i></i>
                                                             <label class="filter-cation" for="off_filter_part{{$group->id}}">جستجو بر اساس {{ $group->name }}</label>
-                                                       
+
                                                             <div class="options">
                                                                 <ul class="li-item">
                                                                     @foreach($group->filters as $filter)
@@ -537,7 +564,7 @@ function sticky_sidebar() {
                                                     <span>
                                                         <svg style="width: 24px; height: 24px; fill: #4d515a;">
                                                             <use xlink:href="#sort">
-                                                              <symbol id="sort" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6 15.793L3.707 13.5l-1.414 1.414 4 4a1 1 0 001.414 0l4-4-1.414-1.414L8 15.793V5H6v10.793zM22 5H10v2h12V5zm0 4H12v2h10V9zm0 4h-8v2h8v-2zm-6 4h6v2h-6v-2z" clip-rule="evenodd"></path></symbol>  
+                                                              <symbol id="sort" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6 15.793L3.707 13.5l-1.414 1.414 4 4a1 1 0 001.414 0l4-4-1.414-1.414L8 15.793V5H6v10.793zM22 5H10v2h12V5zm0 4H12v2h10V9zm0 4h-8v2h8v-2zm-6 4h6v2h-6v-2z" clip-rule="evenodd"></path></symbol>
                                                             </use>
                                                         </svg>
                                                     </span>مرتب سازی
@@ -561,7 +588,7 @@ function sticky_sidebar() {
 
                                             </div>
                                         </div>
-                                  
+
                                         <div class="col-sm-3 gap-col sort-icon text-end">
                                             <div class="btn-group btn-grid">
                                                 <span class="text-page">
@@ -606,7 +633,7 @@ function sticky_sidebar() {
                     </ul>
                 </div>
             </div>
-       
+
     </div>
     <!--content-end-->
 @endsection

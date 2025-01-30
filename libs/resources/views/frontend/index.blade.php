@@ -41,10 +41,10 @@
         <div class="row">
           <div class="col-12 p-0 slide-col position-relative">
             <div class="owl-carousel owl-theme owl-slider">
-                @foreach($slider as $slide) 
+                @foreach($slider as $slide)
                         <a class="item img-pro-banner" href="{{ $slide->url }}">
-                          <img src="{{ asset($slide->image) }}" class="d-none d-md-block" alt="{{ $slide->heading }}"><!--عکس مناسب دسکتاپ-->
-                          <img src="{{ asset($slide->image) }}" class="d-xl-none d-lg-none d-md-none" alt="{{ $slide->heading }}"><!--عکس مناسب گوشی-->
+                          <img width="1343" height="280" src="{{ asset($slide->image) }}" class="d-none d-md-block" alt="{{ $slide->heading }}"><!--عکس مناسب دسکتاپ-->
+                          <img width="1343" height="280" src="{{ asset($slide->image) }}" class="d-xl-none d-lg-none d-md-none" alt="{{ $slide->heading }}"><!--عکس مناسب گوشی-->
                         </a>
                 @endforeach
             </div>
@@ -60,7 +60,7 @@
                     <div class="item">
                       <a class="main-img-category position-relative text-center" href="{{ $item->url }}">
                         <div class="logo-category-image">
-                          <img src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->title }}" />
+                          <img width="144" height="103" src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->title }}" />
                         </div>
                         <div class="layer-category mt-2 mb-2">{{ $item->title }}</div>
                       </a>
@@ -116,7 +116,7 @@
                               <div class="col-12">
                                 <div class="img-pro position-relative">
                                   <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="position-relative">
-                                    <img src="{{ asset($product->image) }}" class="img-fluid" alt="{{ $product->alt }}"/>
+                                    <img width="185" height="130" src="{{ asset($product->image) }}" class="img-fluid" alt="{{ $product->alt }}"/>
                                   </a>
                                 </div>
                               </div>
@@ -269,10 +269,10 @@
                   <div class="d-md-flex flex-item">
                     <div class="d-flex align-items-center">
                       <div>
-                        <img src="{{ asset('images/fresh.png?v=0.0.1') }}" class="img-fluid" />
+                        <img src="{{ asset('images/fresh.png?v=0.0.1') }}" class="img-fluid" width="66" height="64" />
                       </div>
                       <div class="ms-2 me-2">
-                        <img src="{{ asset('images/warranties-heading.png?v=0.0.1') }}" class="img-fluid" style="width:40%"/>
+                        <img width="237" height="24" src="{{ asset('images/warranties-heading.png?v=0.0.1') }}" class="img-fluid" style="width:40%"/>
                       </div>
                     </div>
                     {{--<div>
@@ -285,7 +285,7 @@
                     <div class="d-flex flex-pro">
                         @foreach($warranties as $warranty)
                         <a href="{{ route('frontend.warranties.show', $warranty->slug) }}">
-                            <img src="{{ asset($warranty->logo) }}" class="img-fluid" alt="{{ $warranty->name }}" />
+                            <img width="58" height="58" src="{{ asset($warranty->logo) }}" class="img-fluid" alt="{{ $warranty->name }}" />
                             {{--<span class="price-discount-percent">62%</span>--}}
                         </a>
                         @endforeach
@@ -387,7 +387,7 @@
             </div>
           </div>
         </div>
-      </section>    
+      </section>
     @endif
     @if($manufacturers->count())
     <section class="container-fluid logo-section pt-4 pb-2">
@@ -449,7 +449,7 @@
           <div class="row">
             <div class="col-12 p-0">
               <div class="gird row-category">
-                @foreach($recommendedCategories as $recommend)  
+                @foreach($recommendedCategories as $recommend)
                 <div class="d-flex flex-col">
                   <h4 class="title-section">{{ $recommend['category']->name }}</h4>
                   <p class="text-caption">بر اساس بازدیدهای شما</p>
@@ -474,7 +474,7 @@
           </div>
         </div>
     </section>
-    @endif  
+    @endif
     <section class="container-fluid news-section pe-2 ps-2 pt-4 pb-2">
         <div class="container p-0">
           <div class="row align-items-center">

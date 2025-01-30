@@ -18,3 +18,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/docker
+/storage
+/tests
+.editorconfig
+.gitattributes
+.phpunit.result.cache

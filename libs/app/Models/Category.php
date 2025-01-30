@@ -35,7 +35,7 @@ class Category extends Model
         'show_in_menu',
         'size_type',
     ];
-    
+
     /**
      * Get the attributes that should be cast.
      *
@@ -74,7 +74,7 @@ class Category extends Model
     {
         return 'slug';
     }
-    
+
     public function getAllSubCategoryIds()
     {
         $ids = $this->children->pluck('id')->toArray();
@@ -88,7 +88,7 @@ class Category extends Model
     {
         return $this->belongsToMany(FilterGroup::class);
     }
-    
+
     public function attributeGroups()
     {
         return $this->belongsToMany(AttributeGroups::class, 'attribute_group_category', 'category_id', 'attribute_group_id');
@@ -206,17 +206,17 @@ class Category extends Model
     {
         return $query->where('status', true);
     }
-    
+
     public function scopePublished($query)
     {
         return $query->where('status', true);
     }
-    
+
     public function scopeMenu($query)
     {
         return $query->where('show_in_menu', true);
     }
-    
+
     public function scopeIndex($query)
     {
         return $query->where('is_noindex', false);
@@ -235,5 +235,10 @@ class Category extends Model
     public function scopeNoFollow($query)
     {
         return $query->where('is_nofollow', true);
+    }
+
+    public function getMainSlugAttribute()
+    {
+        return $this->slug ;
     }
 }

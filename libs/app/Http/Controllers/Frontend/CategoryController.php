@@ -27,6 +27,8 @@ class CategoryController extends Controller
         $manufacturers          = $category->manufacturers;
         foreach ($products as $product) {
             $highlightAttributes[$product->id] = [];
+            $image = $product->images()->first() ;
+            $product->second_image = @$image->image ;
             foreach ($product->attributes as $attribute)
             {
                 if ($attribute->pivot->highlight)
@@ -35,7 +37,6 @@ class CategoryController extends Controller
                 }
             }
         }
-
         $isCategoryPage = true;
         return view('frontend.category', compact('isCategoryPage', 'category', 'products', 'mostExpensiveProduct', 'categories', 'highlightAttributes', 'manufacturers'));
     }

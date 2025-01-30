@@ -4,7 +4,15 @@
             <div class="product-thumb list-view product-main-categori">
                 <div class="image">
                     <a href="{{ url('products/' . $product->slug) }}">
-                        <img src="{{ asset(image_resize($product->image, ['width' => 228, 'height' => 228])) }}" alt="{{ $product->alt }}" class="img-fluid">
+                        <div class="image-wrapper">
+                            <img src="{{ asset(image_resize($product->image, ['width' => 228, 'height' => 228])) }}"
+                                 alt="{{ $product->alt }}"
+                                 class="img-fluid img-primary">
+
+                            <img src="{{ asset(image_resize($product->second_image?:$product->image, ['width' => 228, 'height' => 228])) }}"
+                                 alt="{{ $product->alt }} - دوم"
+                                 class="img-fluid img-secondary">
+                        </div>
                     </a>
                 </div>
                 <div class="d-block">
@@ -16,7 +24,7 @@
                 <h3 class="name-category" style="font-size:13px">
                     <a href="{{ url('products/' . $product->slug) }}">{{ $product->name }}</a>
                 </h3>
-               
+
                 @unless($product->stock)
                     <p class="price__product mb-2 mt-2">
                         <strong class="text-muted">ناموجود</strong>
@@ -48,7 +56,7 @@
                             @endunless
                         @endif
                     </div>
-                @endunless 
+                @endunless
                     <div class="badge-container">
                         @if($product->is_festival && $site_settings['is_festival_active'])
                             <p class="badge badge-festival"><span>{{ $site_settings['festival_badge_heading'] }}</span></p>

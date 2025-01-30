@@ -19,6 +19,15 @@
 @endsection
 @section('styles')
 <style>
+    .about-company.c-desc h2 {
+        font-size: 1.5rem;
+    }
+    .about-company.c-desc h3 {
+        font-size: 1.2rem;
+    }
+    .about-company.c-desc h4 {
+        font-size: 1rem;
+    }
     .col-12.no-product-box {
         min-height: 188px;
     }
@@ -819,24 +828,29 @@ function showAddToCartModal() {
         <div id="attributes">
             <article>
                 <section>
-                    @foreach($attributes as $attribute)
-                    <div class="d-block mt-3">
-                        <h3 class="c-params__title d-block">{{ $attribute['group'] }}</h3>
-                    </div>
-                    <ul class="c-params__list">
-                        @foreach($attribute['attributes'] as $name => $value)
-                        @if($value === null) @continue @endif
-                        <li>
-                            <div class="c-params__list-key">
-                                <span class="block">{{ $name }}</span>
+                    <div class="row">
+                        @foreach($attributes as $attribute)
+                            <div class="col-md-6 col-sm-12">
+                                <div class="d-block mt-3">
+                                    <h3 class="c-params__title d-block">{{ $attribute['group'] }}</h3>
+                                </div>
+                                <ul class="c-params__list">
+                                    @foreach($attribute['attributes'] as $name => $value)
+                                        @if($value === null) @continue @endif
+                                        <li>
+                                            <div class="c-params__list-key">
+                                                <span class="block">{{ $name }}</span>
+                                            </div>
+                                            <div class="c-params__list-value">
+                                                <span class="block">{!! nl2br($value) !!}</span>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
-                            <div class="c-params__list-value">
-                                <span class="block">{!! nl2br($value) !!}</span>
-                            </div>
-                        </li>
                         @endforeach
-                    </ul>
-                    @endforeach
+                    </div>
+
                 </section>
             </article>
         </div>

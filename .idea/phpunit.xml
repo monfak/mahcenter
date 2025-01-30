@@ -4,6 +4,7 @@
     <option name="directories">
       <list>
         <option value="$PROJECT_DIR$/libs/tests" />
+        <option value="$PROJECT_DIR$/public_html/crm/libraries/google-api-php-client/tests" />
       </list>
     </option>
   </component>

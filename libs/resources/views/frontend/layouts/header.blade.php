@@ -27,92 +27,95 @@
                 <i class="img-slice"></i> بازگشت
               </span>
             </li>
-            @foreach($menuCategories as $category)
-                <li class="main-menu">
-                @if($category->children->count())
-                    <span class="openSubPanel">
+              @if(isset($menuCategories))
+                  @foreach($menuCategories as $category)
+                      <li class="main-menu">
+                          @if($category->children->count())
+                              <span class="openSubPanel">
                         {{ $category->name }}
                         <span class="arow-menu">
                             <i class="img-slice"></i>
                         </span>
                     </span>
-                    <ul class="subPanel">
-                        <li class="close-li">
+                              <ul class="subPanel">
+                                  <li class="close-li">
                             <span class="closeSubPanel">
                                 <i class="img-slice"></i> بازگشت
                             </span>
-                        </li>
-                        <li class="main-menu">
-                            <a href="{{ route('category.show', [$category->slug]) }}">
-                                مشاهده محصولات
-                                {{ $category->name }}
-                            </a>
-                        </li>
-                        @foreach($category->children as $childCategory)
-                        <li class="main-menu">
-                            @if($childCategory->children->count())
-                                <span class="openSubPanel">
+                                  </li>
+                                  <li class="main-menu">
+                                      <a href="{{ route('category.show', [$category->slug]) }}">
+                                          مشاهده محصولات
+                                          {{ $category->name }}
+                                      </a>
+                                  </li>
+                                  @foreach($category->children as $childCategory)
+                                      <li class="main-menu">
+                                          @if($childCategory->children->count())
+                                              <span class="openSubPanel">
                                     {{ $childCategory->name }}
                                     <span class="arow-menu">
                                         <i class="img-slice"></i>
                                     </span>
                                 </span>
-                                <ul class="subPanel">
-                                    <li class="close-li">
+                                              <ul class="subPanel">
+                                                  <li class="close-li">
                                         <span class="closeSubPanel">
                                             <i class="img-slice"></i> بازگشت
                                         </span>
-                                    </li>
-                                    <li class="main-menu">
-                                        <a href="{{ route('category.show', [$childCategory->slug]) }}">
-                                            مشاهده محصولات
-                                            {{ $childCategory->name }}
-                                        </a>
-                                    </li>
-                                    @foreach($childCategory->children as $grandCategory)
-                                        <li class="main-menu">
-                                        @if($grandCategory->children->count())
-                                            <span class="openSubPanel">
+                                                  </li>
+                                                  <li class="main-menu">
+                                                      <a href="{{ route('category.show', [$childCategory->slug]) }}">
+                                                          مشاهده محصولات
+                                                          {{ $childCategory->name }}
+                                                      </a>
+                                                  </li>
+                                                  @foreach($childCategory->children as $grandCategory)
+                                                      <li class="main-menu">
+                                                          @if($grandCategory->children->count())
+                                                              <span class="openSubPanel">
                                                 {{ $grandCategory->name }}
                                                 <span class="arow-menu">
                                                     <i class="img-slice"></i>
                                                 </span>
                                             </span>
-                                            <ul class="subPanel">
-                                                <li class="close-li">
+                                                              <ul class="subPanel">
+                                                                  <li class="close-li">
                                                     <span class="closeSubPanel">
                                                         <i class="img-slice"></i> بازگشت
                                                     </span>
-                                                </li>
-                                            </ul>
-                                            <li class="main-menu">
-                                                <a href="{{ route('category.show', [$grandCategory->slug]) }}">
-                                                    مشاهده محصولات
-                                                    {{ $grandCategory->name }}
-                                                </a>
-                                            </li>
-                                            <li class="main-menu">
-                                            @foreach($grandCategory->children as $finalCategory)
-                                                <a href="{{ route('category.show', [$finalCategory->slug]) }}">{{ $finalCategory->name }}</a>
-                                            @endforeach
-                                            </li>
-                                        @else
-                                            <a href="{{ route('category.show', [$grandCategory->slug]) }}">{{ $grandCategory->name }}</a>
-                                        @endif
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <a href="{{ route('category.show', [$childCategory->slug]) }}">{{ $childCategory->name }}</a>
-                            @endif
-                        </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <a href="{{ route('category.show', [$category->slug]) }}">{{ $category->name }}</a>
-                @endif
-                </li>
-            @endforeach
+                                                                  </li>
+                                                              </ul>
+                                                      <li class="main-menu">
+                                                          <a href="{{ route('category.show', [$grandCategory->slug]) }}">
+                                                              مشاهده محصولات
+                                                              {{ $grandCategory->name }}
+                                                          </a>
+                                                      </li>
+                                                      <li class="main-menu">
+                                                          @foreach($grandCategory->children as $finalCategory)
+                                                              <a href="{{ route('category.show', [$finalCategory->slug]) }}">{{ $finalCategory->name }}</a>
+                                                          @endforeach
+                                                      </li>
+                                                      @else
+                                                          <a href="{{ route('category.show', [$grandCategory->slug]) }}">{{ $grandCategory->name }}</a>
+                                          @endif
+                                      </li>
+                                  @endforeach
+                              </ul>
+                          @else
+                              <a href="{{ route('category.show', [$childCategory->slug]) }}">{{ $childCategory->name }}</a>
+                          @endif
+                      </li>
+                  @endforeach
+          </ul>
+            @else
+                <a href="{{ route('category.show', [$category->slug]) }}">{{ $category->name }}</a>
+            @endif
+        </li>
+          @endforeach
+              @endif
+
           </ul>
         </li>
         @if($headerMenu->is_active)
@@ -176,7 +179,7 @@
             <div class="d-flex flex-header">
               <div class="d-block">
                 <a href="{{ route('home') }}" class="d-inline-block logo">
-                  <img src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid" alt="مه سنتر"/>
+                  <img width="128" height="63" src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid" alt="مه سنتر"/>
                 </a>
               </div>
               <div class="position-relative search-desc">
@@ -333,48 +336,54 @@
                     </div>
                     <div class="c-navi-new-list__sublist js-mega-menu-categories-options c-navi-new__ads-holder" style="display: none">
                       <div class="c-navi-new-list__inner-categories">
-                        @foreach($menuCategories as $category)
-                        @if(count($category->children))
-                        <a href="{{ route('category.desc', $category->slug) }}" data-index="{{ $category->id }}" class="c-navi-new-list__inner-category js-mega-menu-category{{ $loop->first ? ' c-navi-new-list__inner-category--hovered' : '' }}">
-                            @if($category->icon)
-                            <span class="ico-menu">
-                                <img src="{{ asset($category->icon) }}"  class="img-fluid" alt="{{ $category->name }}"/>
-                            </span>
-                            @endif
-                            {{ $category->name }}
-                        </a>
-                        @endif
-                        @endforeach
+                      @if(isset($menuCategories))
+                          @foreach($menuCategories as $category)
+                              @if(count($category->children))
+                                  <a href="{{ route('category.desc', $category->slug) }}" data-index="{{ $category->id }}" class="c-navi-new-list__inner-category js-mega-menu-category{{ $loop->first ? ' c-navi-new-list__inner-category--hovered' : '' }}">
+                                      @if($category->icon)
+                                          <span class="ico-menu">
+                            <img width="28" height="28" src="{{ asset($category->icon) }}"  class="img-fluid" alt="{{ $category->name }}"/>
+                        </span>
+                                      @endif
+                                      {{ $category->name }}
+                                  </a>
+                              @endif
+                          @endforeach
+                      @endif
+
                       </div>
                       <div class="c-navi-new-list__options-container">
-                        @foreach($menuCategories as $category)
-                        @if(count($category->children))
-                        <div class="c-navi-new-list__options-list js-mega-menu-category-options{{ $loop->first ? ' is-active' : '' }}" id="categories-{{ $category->id }}">
-                          <div class="c-navi-new-list__sublist-top-bar">
-                            <a href="{{ route('category.desc', $category->slug) }}" class="c-navi-new-list__sublist-see-all-cats">
-                              همه دسته‌بندی‌های {{ $category->name }}
-                            </a>
-                          </div>
-                          <ul class="p-0">
-                            <!--تکرار دسته و زیر ودسته-->
-                            @foreach($category->children as $childCategory)
-                                <li class="c-navi-new-list__sublist-option c-navi-new-list__sublist-option--title">
-                                  <a href="{{ route('category.show', $childCategory->slug) }}" class="c-navi-new__big-display-title">
-                                    <span>{{ $childCategory->name }}</span>
-                                  </a>
-                                </li>
-                                @foreach($childCategory->children as $grandCategory)
-                                <li>
-                                  <a href="{{ route('category.show', $grandCategory->slug) }}" class="c-navi-new__big-display-title">
-                                    <span>{{ $grandCategory->name }}</span>
-                                  </a>
-                                </li>
-                                @endforeach
-                            @endforeach
-                          </ul>
-                        </div>
-                        @endif
-                        @endforeach
+                      @if(isset($menuCategories))
+                          @foreach($menuCategories as $category)
+                              @if(count($category->children))
+                                  <div class="c-navi-new-list__options-list js-mega-menu-category-options{{ $loop->first ? ' is-active' : '' }}" id="categories-{{ $category->id }}">
+                                      <div class="c-navi-new-list__sublist-top-bar">
+                                          <a href="{{ route('category.desc', $category->slug) }}" class="c-navi-new-list__sublist-see-all-cats">
+                                              همه دسته‌بندی‌های {{ $category->name }}
+                                          </a>
+                                      </div>
+                                      <ul class="p-0">
+                                          <!--تکرار دسته و زیر ودسته-->
+                                          @foreach($category->children as $childCategory)
+                                              <li class="c-navi-new-list__sublist-option c-navi-new-list__sublist-option--title">
+                                                  <a href="{{ route('category.show', $childCategory->slug) }}" class="c-navi-new__big-display-title">
+                                                      <span>{{ $childCategory->name }}</span>
+                                                  </a>
+                                              </li>
+                                              @foreach($childCategory->children as $grandCategory)
+                                                  <li>
+                                                      <a href="{{ route('category.show', $grandCategory->slug) }}" class="c-navi-new__big-display-title">
+                                                          <span>{{ $grandCategory->name }}</span>
+                                                      </a>
+                                                  </li>
+                                              @endforeach
+                                          @endforeach
+                                      </ul>
+                                  </div>
+                              @endif
+                          @endforeach
+                      @endif
+
                       </div>
                     </div>
                   </li>

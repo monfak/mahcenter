@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\ProductObserver;
+use App\Services\StringService;
 use App\Traits\LoggableRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Product extends Model
 {
     use LoggableRelations;
-    
+
     protected $fillable = [
         'name',
         'label',
@@ -66,8 +67,9 @@ class Product extends Model
         'required_national_id',
         'is_festival',
         'is_available',
+        'dev_title',
     ];
-    
+
     protected $logRelations = [
         'user' => ['id', 'name'],
         'category' => ['id', 'name', 'slug'],
@@ -80,7 +82,7 @@ class Product extends Model
         'relatedProducts' => ['id', 'name', 'slug'],
         'crossProducts' => ['id', 'name', 'slug'],
     ];
-    
+
     protected $logOnly = [
         'name',
         'label',
@@ -119,7 +121,7 @@ class Product extends Model
         'is_available',
         'discount',
     ];
-    
+
     protected $translations = [
         'id' => 'آی دی',
         'name' => 'نام',
@@ -193,17 +195,27 @@ class Product extends Model
         'value' => 'مقدار',
         'highlight' => 'هایلایت',
     ];
-    
+
+
+    public static function boot()
+    {
+        $service = app(StringService::class) ;
+        parent::boot();
+        static::saving(function ($model) use ($service) {
+            $model->dev_title = $service->setDevTitle($model->title);
+        });
+    }
+
     public function getLabel(string $field): string
     {
         return $this->translations[$field] ?? $field;
     }
-    
+
     public function getLogRelations(): array
     {
         return $this->logRelations;
     }
-    
+
     public function getLogRelation(string $relation): ?array
     {
         return $this->logRelations[$relation] ?? null;
@@ -212,9 +224,9 @@ class Product extends Model
     public function getLogOnly(): array
     {
         return $this->logOnly;
-    }    
-    
-    
+    }
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -236,7 +248,7 @@ class Product extends Model
             'discount' => 'integer',
         ];
     }
-    
+
     protected $type = [
         'name' => 'string',
         'label' => 'string',
@@ -278,7 +290,7 @@ class Product extends Model
         'is_available' => 'boolean',
         'discount' => 'decimal',
     ];
-    
+
     public function getFieldType(string $field): string
     {
         return $this->type[$field] ?? 'string';
@@ -309,7 +321,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -324,7 +336,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductImages::class);
     }
-    
+
     public function warranties()
     {
         return $this->belongsToMany(Warranty::class);
@@ -339,7 +351,7 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -349,12 +361,12 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class, 'reviews');
     }
-    
+
     public function articles()
     {
         return $this->belongsToMany(Article::class);
     }
-    
+
     public function notes()
     {
         return $this->morphMany(Note::class, 'noteable');
@@ -434,7 +446,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
     }
-    
+
     public function crossProducts()
     {
         return $this->belongsToMany(Product::class, 'cross_products', 'product_id', 'cross_product_id');
@@ -444,7 +456,7 @@ class Product extends Model
     {
         return $query->where('status', true);
     }
-    
+
     public function scopeIndex($query)
     {
         return $query->where('is_noindex', false);
@@ -464,12 +476,12 @@ class Product extends Model
     {
         return $query->where('is_nofollow', true);
     }
-    
+
     public function scopeFestival($query)
     {
         return $query->where('is_festival', true);
     }
-    
+
     public function scopeNotFestival($query)
     {
         return $query->where('is_festival', false);

@@ -28,7 +28,7 @@ class PaymentController extends Controller
     public function request(Request $request, Order $order, $gateway = 'mellat')
     {
         Log::info('Starting payment request for Order ID: ' . $order->id);
-        //$user = auth()->user(); 
+        //$user = auth()->user();
         //abort_unless($order->user_id == $user->id, 403, 'شما اجازه انجام این عملیات را ندارید.');
         $price = ini_set ( "soap.wsdl_cache_enabled", "0" );
 
@@ -72,7 +72,7 @@ class PaymentController extends Controller
                 $paymentData['tracking_code'] = uniqid(rand(100000, 999999));
                 $paymentData['ref_id'] = uniqid(rand(100000, 999999));
             }
-            
+
     		$payment = Payment::create($paymentData);
             Log::info('Payment record created for Order ID: ' . $order->id . ' - Payment ID: ' . $payment->id);
     		if ($result->SalePaymentRequestResult->Token && $result->SalePaymentRequestResult->Status === 0) {
@@ -115,11 +115,11 @@ class PaymentController extends Controller
             Log::error('Payment record not found for Order ID: ' . $order->id);
             return redirect()->route('thankyou', $order->id)->withErrors(['paymentError' => 'رکورد پرداخت یافت نشد']);
         }
-        
+
         if (!auth()->check()) {
             session(['order_id' => $order->id]);
         }
-        
+
     	if ($RRN > 0 && $status == 0) {
 
     		$params = [
@@ -161,7 +161,7 @@ class PaymentController extends Controller
                     'title'=>'',
                     'message'=>'پرداخت شما موفقیت آمیز بود.',
                 ]);
-                
+
                 return redirect()->route('thankyou', $order->id);
     		} catch (Exception $ex) {
     		    Log::error('Exception during ConfirmPayment for Order ID: ' . $order->id . ' - Exception Message: ' . $ex->getMessage());

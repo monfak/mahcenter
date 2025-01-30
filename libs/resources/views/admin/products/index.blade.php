@@ -51,11 +51,11 @@
     </script>
     <script type="text/javascript">
       $(".categories").change(function() {
-        
+
         var category=$(this).val();
         var quantity=$(".quantity").val();
         $('#products').DataTable().destroy();
-        
+
         $('#products').DataTable({
             processing: true,
             serverSide: true,
@@ -76,14 +76,14 @@
                     name: 'price',
                     render: function(data, type, row) {
                         let priceHtml = `<span class="editable-price" data-slug="${row.slug}">`;
-                        
+
                         if (row.special && parseFloat(row.special) > 0) {
                             priceHtml += `<del class="text-red price">${formatNumber(row.price)} تومان</del> `;
                             priceHtml += `<ins class="text-green special">${formatNumber(row.special)} تومان</ins>`;
                         } else {
                             priceHtml += `<span class="price">${formatNumber(row.price)} تومان</span>`;
                         }
-                        
+
                         priceHtml += `</span>`;
                         return priceHtml;
                     }
@@ -92,9 +92,14 @@
                 {data: 'updated_at', name: 'updated_at'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
+                {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}
             ],
             stateSave: true,
-            "order": [[ 7, "desc" ]],
+            "order": [[ 7, "desc" ],[5,'desc']],
+            orderMulti: true,
+            columnDefs: [
+                { targets: [7, 5], orderable: true },
+            ],
             "language": {
                 "url": "/dashboard/plugins/yajra/i18n/Persian.json"
             },
@@ -103,11 +108,11 @@
         });
       });
     $(".quantity").change(function(){
-        
+
         var quantity=$(this).val();
         var category=$(".categories").val();
         $('#products').DataTable().destroy();
-        
+
         $('#products').DataTable({
             processing: true,
             serverSide: true,
@@ -128,14 +133,14 @@
                     name: 'price',
                     render: function(data, type, row) {
                         let priceHtml = `<span class="editable-price" data-slug="${row.slug}">`;
-                        
+
                         if (row.special && parseFloat(row.special) > 0) {
                             priceHtml += `<del class="text-red price">${formatNumber(row.price)} تومان</del> `;
                             priceHtml += `<ins class="text-green special">${formatNumber(row.special)} تومان</ins>`;
                         } else {
                             priceHtml += `<span class="price">${formatNumber(row.price)} تومان</span>`;
                         }
-                        
+
                         priceHtml += `</span>`;
                         return priceHtml;
                     }
@@ -144,6 +149,7 @@
                 {data: 'updated_at', name: 'updated_at'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
+                {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}
             ],
             stateSave: true,
             "order": [[ 7, "desc" ]],
@@ -174,14 +180,14 @@
                 name: 'price',
                 render: function(data, type, row) {
                     let priceHtml = `<span class="editable-price" data-slug="${row.slug}">`;
-                    
+
                     if (row.special && parseFloat(row.special) > 0) {
                         priceHtml += `<del class="text-red price">${formatNumber(row.price)} تومان</del> `;
                         priceHtml += `<ins class="text-green special">${formatNumber(row.special)} تومان</ins>`;
                     } else {
                         priceHtml += `<span class="price">${formatNumber(row.price)} تومان</span>`;
                     }
-                    
+
                     priceHtml += `</span>`;
                     return priceHtml;
                 }
@@ -190,6 +196,7 @@
             {data: 'updated_at', name: 'updated_at'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}
         ],
         stateSave: true,
         "order": [[ 7, "desc" ]],
@@ -199,21 +206,21 @@
         "buttons": [ 'copy', 'excel', 'pdf', 'colvis' ],
         "pagingType": "simple_numbers_no_ellipses"
     });
-    
+
     function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    
+
     function removeCommas(num) {
         return num.replace(/,/g, '');
     }
-    
+
     $('#products').on('dblclick', '.editable-price', function() {
         var span = $(this);
         var slug = span.data('slug');
         var priceValue = span.find('.price').text().replace(/,| تومان/g, '').trim();
         var specialPriceValue = span.find('.special').text().replace(/,|\(|\)| تومان/g, '').trim();
-        
+
         span.data('original-price', priceValue);
         span.data('original-special-price', specialPriceValue);
 
@@ -225,7 +232,7 @@
             <button class="btn btn-primary btn-xs btn-save-price" data-slug="${slug}">ذخیره</button>
             <button class="btn btn-secondary btn-xs btn-cancel-price">لغو</button>
         `);
-        
+
         span.find('.edit-price, .edit-special-price').on('input', function() {
             var input = $(this);
             var hiddenInput = input.hasClass('edit-price') ? span.find('.hidden-price') : span.find('.hidden-special-price');
@@ -235,7 +242,7 @@
             input.val(formatNumber(value));
         });
     });
-    
+
     $('#products').on('click', '.btn-save-price', function() {
         var button = $(this);
         var slug = button.data('slug');
@@ -261,7 +268,7 @@
                     let updatedHtml = newSpecialPrice
                         ? `<del class="text-red price">${formatNumber(newPrice)} تومان</del> <ins class="text-green special">${formatNumber(newSpecialPrice)} تومان</ins>`
                         : `<span class="price">${formatNumber(newPrice)} تومان</span>`;
-                    
+
                     span.html(updatedHtml);
                     iziToast.success({
                         title: 'موفقیت',
@@ -278,20 +285,20 @@
             }
         });
     });
-    
+
     $('#products').on('click', '.btn-cancel-price', function() {
         var button = $(this);
         var span = button.closest('.editable-price');
         var originalPrice = span.data('original-price');
         var originalSpecialPrice = span.data('original-special-price');
-        
+
         let restoredHtml = originalSpecialPrice
             ? `<del class="text-red price">${formatNumber(originalPrice)} تومان</del> <ins class="text-green special">${formatNumber(originalSpecialPrice)} تومان</ins>`
             : `<span class="price">${formatNumber(originalPrice)} تومان</span>`;
-        
+
         span.html(restoredHtml);
     });
-    
+
     $('#products').on('dblclick', '.editable-stock', function() {
         var span = $(this);
         var slug = span.data('slug');
@@ -340,7 +347,7 @@
         span.html(originalStock);
     });
     </script>
-@endsection 
+@endsection
 @section('content')
 <div class="row">
     <div class="col-xs-12">
@@ -353,19 +360,19 @@
                  </option>
                 @endforeach
             </select>
-            
+
                 <select class="quantity">
                 <option value="0">همه کالاها</option>
               <option value="1">فقط موجود</option>
               <option value="2">فقط نا موجود</option>
-            
+
             </select>
             <div class="box-header with-border">
                 <h3 class="box-title">لیست محصولات</h3>
-                
-                
+
+
                 {{ Illuminate\Support\Facades\Log::emergency(session('msg'))}}
-                
+
                 @if (cache('message'))
                 <div class="alert">{{  cache('message') }}</div>
                  @endif

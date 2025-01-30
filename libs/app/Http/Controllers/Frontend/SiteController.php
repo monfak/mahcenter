@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\ImageManager;
 use App\Models\Slide;
+use App\Services\ProductService;
+use App\Services\StringService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -20,12 +22,19 @@ use App\Models\FilterGroup;
 
 class SiteController extends Controller
 {
+    protected $service ;
+    protected $stringService ;
     /**
      * Search for products in a specific categories or in all categories.
      *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function __construct()
+    {
+        $this->service = app(ProductService::class) ;
+        $this->stringService = app(StringService::class) ;
+    }
     public function search(Request $request)
     {
         $phrase = $request->input('s') ?? null;
@@ -199,7 +208,8 @@ class SiteController extends Controller
         if($phrase) {
             $phrases = explode(' ', $phrase);
             foreach($phrases as $key) {
-                $productsQuery->where('name', 'LIKE', "%$key%");
+                $string = $this->stringService->setDevTitle($key,true) ;
+                $productsQuery->where('dev_title', 'LIKE', "%$string%");
             }
         }
         $productsQuery->orWhere('model', 'like', "%$phrase%");

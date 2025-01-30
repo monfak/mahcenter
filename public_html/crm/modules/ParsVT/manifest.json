@@ -1,0 +1,185 @@
+{
+  "dir": "rtl",
+  "lang": "fa",
+  "name": "پارس ویتایگر",
+  "short_name": "پارس ویتایگر",
+  "description": "نرم افزار CRM پارس ویتایگر",
+  "theme_color": "#2c3b49",
+  "background_color": "#fff",
+  "display": "standalone",
+  "orientation": "any",
+  "scope": "/",
+  "start_url": "../../index.php",
+  "categories": ["business"],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://cafebazaar.ir/app/com.parsvt.www",
+      "id": "com.parsvt.www"
+    },
+    {
+      "platform": "bazaar",
+      "url": "https://cafebazaar.ir/app/com.parsvt.www"
+    }
+  ],
+  "icons": [
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/parsvt_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots" : [
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Calendar View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "ListView of Leads Module"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_4.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Detail View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_5.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Edit View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_6.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "User Profile View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Dashboard View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Calendar View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "ListView of Leads Module"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_4.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Detail View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_5.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Edit View"
+    },
+    {
+      "src": "../../modules/ParsVT/resources/pwa/ScreenShot_6.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "User Profile View"
+    }
+  ],
+  "shortcuts" : [
+    {
+      "name": "DashBoard",
+      "shortname": "DashBoard",
+      "url": "../../index.php?module=Home&view=DashBoard"
+    },
+    {
+      "name": "Agenda",
+      "shortname": "Calendar",
+      "url": "../../index.php?module=Calendar&view=Calendar",
+      "description": "List of events planned"
+    },
+    {
+      "name": "Deals",
+      "shortname": "Potentials",
+      "url": "../../index.php?module=Potentials&view=List&app=SALES",
+      "description": "List of deals"
+    },
+    {
+      "name": "Reports",
+      "shortname": "Reports",
+      "url": "../../index.php?module=Reports&view=List"
+    },
+    {
+      "name": "New event",
+      "url": "../../index.php?module=Calendar&view=Edit&mode=Events"
+    },
+    {
+      "name": "New task",
+      "url": "../../index.php?module=Calendar&view=Edit&mode=Calendar"
+    }
+  ]
+}

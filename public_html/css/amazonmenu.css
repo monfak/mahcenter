@@ -1,0 +1,91 @@
+.amazonmenu ul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.amazonmenu >  ul > li{
+	width: 100%;
+	position: static;
+}
+.menu-item.hassub.selected a i {
+    color: #c03837 !important;
+	font-size:12px !important;
+	top: -5px !important;
+}
+.amazonmenu > ul{
+	background: white;
+}
+.menu-item.hassub.selected > a {
+    color: #bc2e2e !important;
+}
+.amazonmenu > ul > li > a{
+	display: block;
+	overflow: auto;
+	line-height: 3.7;
+	position: relative;
+	text-decoration: none;
+	text-indent: 10px;
+	width: 22%;
+	font-size: 12px;
+	padding: 0 20px;
+	overflow:hidden;
+	z-index: 5;
+overflow: hidden;
+background-color: #ececec;
+}
+
+.bg-menu ul li a:hover{
+	border:none !important;
+}
+.amazonmenu ul li > div, .amazonmenu ul li > ul{ 
+	background-color: rgba(255, 255, 255, 0.6);
+	border: 1px solid #e3e3e3;
+	display: none;
+	font-weight: normal;
+	width: 25%;
+    right: 22%;
+	padding: 10px 0 0 0;
+	position: absolute;
+	top: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	z-index: 1000;
+	height:400px;
+}
+
+@media screen and (max-width: 480px){ 
+	.amazonmenu ul li > div, .amazonmenu ul li > ul{
+		left: 30px;
+	}
+	.amazonmenu > ul li.hassub.selected::after{ 
+		background: #eee;
+		content: '';
+		height: 100%;
+		left: 0;
+		opacity: .8;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: 1;
+	}
+}
+.bg-menu {
+	width: 80%;
+	height: 90%;
+	border-radius: 25px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto !important;
+	padding: 10px !important;
+}
+.bg-menu li a:hover {
+    color: #c03636;
+}

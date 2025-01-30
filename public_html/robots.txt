@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /search?
+Disallow: /admin
+Disallow: **?utm_source=**
+Disallow: /cart
+
+Sitemap: https://mahcenter.com/sitemap.xml

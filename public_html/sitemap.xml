@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>https://mahcenter.com/sitemap-blog.xml</loc>
+            <lastmod>2025-01-22T14:44:26+03:30</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://mahcenter.com/sitemap-categories.xml</loc>
+            <lastmod>2025-01-26T00:00:02+03:30</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://mahcenter.com/sitemap-manufacturers.xml</loc>
+            <lastmod>2025-01-26T10:11:08+03:30</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://mahcenter.com/sitemap-pages.xml</loc>
+            <lastmod>2025-01-15T11:14:32+03:30</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://mahcenter.com/sitemap-products.xml</loc>
+            <lastmod>2025-01-26T10:11:08+03:30</lastmod>
+    </sitemap>
+</sitemapindex>

@@ -1,0 +1,286 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  border: none;
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  font-style: normal;
+  font-weight: 900;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../fonts/woff2/IRANSansWeb(FaNum)_Black.woff2")
+      format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("../fonts/woff/IRANSansWeb(FaNum)_Black.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("../fonts/ttf/IRANSansWeb(FaNum)_Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../fonts/woff2/IRANSansWeb(FaNum)_Bold.woff2")
+      format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("../fonts/woff/IRANSansWeb(FaNum)_Bold.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("../fonts/ttf/IRANSansWeb(FaNum)_Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../fonts/woff2/IRANSansWeb(FaNum)_Medium.woff2")
+      format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("../fonts/woff/IRANSansWeb(FaNum)_Medium.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("../fonts/ttf/IRANSansWeb(FaNum)_Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../fonts/woff2/IRANSansWeb(FaNum)_Light.woff2")
+      format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("../fonts/woff/IRANSansWeb(FaNum)_Light.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("../fonts/ttf/IRANSansWeb(FaNum)_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  font-style: normal;
+  font-weight: 200;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../fonts/woff2/IRANSansWeb(FaNum)_UltraLight.woff2")
+      format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("../fonts/woff/IRANSansWeb(FaNum)_UltraLight.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("../fonts/ttf/IRANSansWeb(FaNum)_UltraLight.ttf") format("truetype");
+}
+
+
+html, body {
+  width: 100%;
+  height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+  margin: 0px;
+  font-family: IRANSansWeb, sans-serif, serif;
+  box-sizing: border-box;
+  max-width: 100%;
+  background-color:#fff;
+  overflow-x: hidden;
+  font-size: 13px
+}
+.d-block{
+  display: block;
+}
+.accountWrapper{
+  max-width: 400px;
+  margin:10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 7px;
+  width: 100%;
+}
+
+.text-neutral-900 {
+  color: #0c0c0c;
+}
+.text-right {
+  text-align: right;
+}
+.w-full {
+  width: 100%;
+}
+.mt-4 {
+  margin-top: 16px;
+}
+.mb-2 {
+    margin-bottom: .5rem
+}
+.text-h4 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 2.1;
+}
+.text-subtitle {
+  font-weight: 400;
+  line-height: 2.15;
+}
+.p-5 {
+  padding: 20px;
+}
+.text-h4 {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 2.1;
+}
+@media (min-width:768px) {
+  .d-block.w-full.error input {
+    border-color: #b2001a;
+  }
+  .accountWrapper{
+    border: 1px solid #e0e0e2;
+  }
+  .accountWrapper{
+    padding: 32px;
+    justify-content: center;
+  }
+  .text-h4 {
+    font-size: 1.2rem;
+  }
+  .lg\:py-2 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .text-subtitle {
+    font-size: 14px;
+  }
+}
+.text-neutral-700 {
+  color: #646582;
+  font-weight: 300;
+}
+.px-2 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.rounded-medium {
+  border-radius: 8px;
+}
+.justify-center {
+  justify-content: center;
+}
+.items-center {
+  align-items: center;
+}
+.flex-col {
+  flex-direction: column;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+.flex {
+  display: flex;
+}
+.text-hint-text-error {
+  color: #b2001a;
+  margin-top: 5px;
+  font-size: 12px;
+}
+.frm input {
+  box-shadow: none !important;
+  border: 2px solid #e0e0e2;
+  line-height: 3;
+}
+.btn-primarty.w-full {
+  background-color: #ef4056;
+  border-color: #ef4056;
+  box-shadow: none !important;
+  line-height: 3;
+  outline: none !important;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+.mt-8{
+  margin-top: 32px
+}
+.text-caption {
+  font-size: 11px;
+}
+.text-secondary-700 {
+  color: #008eb2;
+}
+.inline-block {
+  display: inline-block;
+}
+.mx-1 {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+a{
+  text-decoration: none;
+}
+.btn{
+  cursor: pointer;
+}
+@media (max-width: 767.99px) {
+  .d-block.w-full.error input {
+    border-bottom-color: #b2001a;
+  }
+  .frm input {
+    background-color: #f0f0f1;
+    border-color: #f0f0f1;
+  }
+  .text-caption {
+    font-size: 9px;
+  }
+}
+.text-center{
+    text-align: center;
+}
+.mt-4 {
+    margin-top: 16px;
+}
+.mb-6 {
+    margin-bottom: 24px;
+}
+.my-4 {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+.position-relative{
+    position: relative;
+}
+.icon-lnk {
+    position: absolute;
+    right: 0;
+    top: 18px;
+}
+.text-secondary-500 {
+    color: #008eb2;
+}
+.mx-2 {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.text-neutral-700 {
+    color: #5b5c7b;
+}
+.text-primary-500 {
+    color: #ef4056;
+}
+.alert{position:relative;padding:.75rem 1.25rem;margin-bottom:1rem;border:1px solid transparent;border-radius:.25rem}.alert-heading{color:inherit}.alert-link{font-weight:700}.alert-dismissible{padding-left:4rem}.alert-dismissible .close{position:absolute;top:0;left:0;padding:.75rem 1.25rem;color:inherit}.alert-primary{color:#004085;background-color:#cce5ff;border-color:#b8daff}.alert-primary hr{border-top-color:#9fcdff}.alert-primary .alert-link{color:#002752}.alert-secondary{color:#383d41;background-color:#e2e3e5;border-color:#d6d8db}.alert-secondary hr{border-top-color:#c8cbcf}.alert-secondary .alert-link{color:#202326}.alert-success{color:#155724;background-color:#d4edda;border-color:#c3e6cb}.alert-success hr{border-top-color:#b1dfbb}.alert-success .alert-link{color:#0b2e13}.alert-info{color:#0c5460;background-color:#d1ecf1;border-color:#bee5eb}.alert-info hr{border-top-color:#abdde5}.alert-info .alert-link{color:#062c33}.alert-warning{color:#856404;background-color:#fff3cd;border-color:#ffeeba}.alert-warning hr{border-top-color:#ffe8a1}.alert-warning .alert-link{color:#533f03}.alert-danger{color:#721c24;background-color:#f8d7da;border-color:#f5c6cb}.alert-danger hr{border-top-color:#f1b0b7}.alert-danger .alert-link{color:#491217}.alert-light{color:#818182;background-color:#fefefe;border-color:#fdfdfe}.alert-light hr{border-top-color:#ececf6}.alert-light .alert-link{color:#686868}.alert-dark{color:#1b1e21;background-color:#d6d8d9;border-color:#c6c8ca}.alert-dark hr{border-top-color:#b9bbbe}.alert-dark .alert-link{color:#040505}

@@ -1,0 +1,64 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>chat_invitations</name>
+			<sql><![CDATA[
+                CREATE TABLE `chat_invitations` (
+  `userID` int(11) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  PRIMARY KEY (`userID`,`channel`),
+  KEY `dateTime` (`dateTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>chat_bans</name>
+			<sql><![CDATA[
+                CREATE TABLE `chat_bans` (
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL,
+  PRIMARY KEY (`userID`),
+  KEY `userName` (`userName`),
+  KEY `dateTime` (`dateTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>chat_online</name>
+			<sql><![CDATA[
+                CREATE TABLE `chat_online` (
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) NOT NULL,
+  `userRole` int(1) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL,
+  PRIMARY KEY (`userID`),
+  KEY `userName` (`userName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>chat_messages</name>
+			<sql><![CDATA[
+                CREATE TABLE `chat_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) NOT NULL,
+  `userRole` int(1) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL,
+  `text` text,
+  PRIMARY KEY (`id`),
+  KEY `message_condition` (`id`,`channel`,`dateTime`),
+  KEY `dateTime` (`dateTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+	</tables>
+</schema>

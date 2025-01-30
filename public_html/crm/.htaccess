@@ -1,0 +1,145 @@
+# Generate on 2025-01-16 09:48:33 for crm.mahcenter.com
+ErrorDocument 400 //modules/ParsVT/errors/
+ErrorDocument 401 //modules/ParsVT/errors/
+ErrorDocument 403 //modules/ParsVT/errors/
+ErrorDocument 404 //modules/ParsVT/errors/
+ErrorDocument 500 //modules/ParsVT/errors/
+ErrorDocument 502 //modules/ParsVT/errors/
+ErrorDocument 504 //modules/ParsVT/errors/
+
+# Secure Files From Illegal Access
+<FilesMatch "\.(htaccess|htpasswd|sh|inc|bak|tpl|log|offline|dongle|pvt)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+
+# Change PHP Settings
+<IfModule mod_php5.c>
+    #php_flag output_buffering off
+    #php_flag  log_errors off
+    #php_value error_log /home/mahcenter/public_html/crm/logs/error_log
+    #php_flag display_startup_errors on
+    #php_flag display_errors on
+    #php_flag html_errors on
+    #php_value error_reporting 2
+</IfModule>
+
+# Enable Cache
+<ifModule mod_headers.c>
+	Header set Access-Control-Allow-Origin "*"
+<filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|webp)$">
+    Header set Cache-Control "max-age=9592000, public"
+  </filesMatch>
+  <filesMatch "\.(css)$">
+    Header set Cache-Control "max-age=804800, public"
+  </filesMatch>
+  <filesMatch "\.(js)$">
+    Header set Cache-Control "max-age=816000, public"
+  </filesMatch>
+</IfModule>
+	
+# Compress JavaScript & CSS
+<IfModule mod_deflate.c>
+  <FilesMatch "\.(js|css|php)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+</IfModule>
+
+# Mod Rewrite
+<ifmodule mod_rewrite.c>
+    RewriteEngine on 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # Disallow WebServer To Index Files
+    Options -Indexes
+    RewriteRule ^([0-9]+)([^/]*)$ shorturl.php?id=$1
+</ifmodule>
+		
+# Disable mod_security
+<ifmodule mod_security.c>
+    #SecFilterEngine off
+    #SecFilterScanPOST off
+</ifmodule>
+
+
+# 8G:[USER AGENT]
+<IfModule mod_rewrite.c>
+	RewriteCond %{HTTP_USER_AGENT} ([a-z0-9]{2000,}) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (&lt;|%0a|%0d|%27|%3c|%3e|%00|0x00|\\x22) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (ahrefs|archiver|curl|libwww-perl|pycurl|scan) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (oppo\sa33|(c99|php|web)shell|site((.){0,2})copier) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (eval|unserializ) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (acapbot|acoonbot|alexibot|asterias|attackbot|awario|backdor|becomebot|binlar|blackwidow|blekkobot|blex|blowfish|bullseye|bunnys|butterfly|careerbot|casper) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (checkpriv|cheesebot|cherrypick|chinaclaw|choppy|clshttp|cmsworld|copernic|copyrightcheck|cosmos|crescent|datacha|(\b)demon(\b)|diavol|discobot|dittospyder) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (dotbot|dotnetdotcom|dumbot|econtext|emailcollector|emailsiphon|emailwolf|eolasbot|eventures|extract|eyenetie|feedfinder|flaming|flashget|flicky|foobot|fuck) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (g00g1e|getright|gigabot|go-ahead-got|gozilla|grabnet|grafula|harvest|heritrix|httracks?|icarus6j|jetbot|jetcar|jikespider|kmccrew|leechftp|libweb|liebaofast) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (linkscan|linkwalker|loader|lwp-download|majestic|masscan|miner|mechanize|mj12bot|morfeus|moveoverbot|netmechanic|netspider|nicerspro|nikto|ninja|nominet|nutch) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (octopus|pagegrabber|petalbot|planetwork|postrank|proximic|purebot|queryn|queryseeker|radian6|radiation|realdownload|remoteview|rogerbot|scan|scooter|seekerspid) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (semalt|siclab|sindice|sistrix|sitebot|siteexplorer|sitesnagger|skygrid|smartdownload|snoopy|sosospider|spankbot|spbot|sqlmap|stackrambler|stripper|sucker|surftbot) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (sux0r|suzukacz|suzuran|takeout|teleport|telesoft|true_robots|turingos|turnit|vampire|vikspider|voideye|webleacher|webreaper|webstripper|webvac|webviewer|webwhacker) [NC,OR]
+	RewriteCond %{HTTP_USER_AGENT} (winhttp|wwwoffle|woxbot|xaldon|xxxyy|yamanalab|yioopbot|youda|zeus|zmeu|zune|zyborg) [NC]
+	RewriteRule .* //modules/ParsVT/errors/?log [END,NE,E=nG_USER_AGENT:%1]
+</IfModule>
+
+# 8G:[REMOTE HOST]
+<IfModule mod_rewrite.c>
+	RewriteCond %{REMOTE_HOST} (163data|amazonaws|colocrossing|crimea|g00g1e|justhost|kanagawa|loopia|masterhost|onlinehome|poneytel|sprintdatacenter|reverse.softlayer|safenet|ttnet|woodpecker|wowrack) [NC]
+	RewriteRule .* //modules/ParsVT/errors/?log [END,NE,E=nG_REMOTE_HOST:%1]
+</IfModule>
+
+# 8G:[HTTP REFERRER]
+<IfModule mod_rewrite.c>
+	RewriteCond %{HTTP_REFERER} (order(\s|%20)by(\s|%20)1--) [NC,OR]
+	RewriteCond %{HTTP_REFERER} (100dollars|best-seo|blue\spill|cocaine|ejaculat|erectile|erections|hoodia|huronriveracres|impotence|levitra|libido|lipitor|mopub\.com|phentermin) [NC,OR]
+	RewriteCond %{HTTP_REFERER} (pornhelm|pro[sz]ac|sandyauer|semalt\.com|social-buttions|todaperfeita|tramadol|troyhamby|ultram|unicauca|valium|viagra|vicodin|xanax|ypxaieo) [NC]
+	RewriteRule .* //modules/ParsVT/errors/?log [END,NE,E=nG_HTTP_REFERRER:%1]
+</IfModule>
+
+# 8G:[ROGUE PHP FILES]
+<IfModule mod_rewrite.c>
+	RewriteCond %{REQUEST_URI} (_0-load|00212|007|00x69|01|05623ecdddd|08_45_27_loggo|0803|0aa1883c|0byte|0day|0m|0wn3d|1050804k|abc|admin1|ajaxcommandshell|akismet|alf4|alfa|alfa2|alfa5|alfashell|alfx|alfa4|alfav4|amad|anasslost|anassgmr|ancvxia|ande|andre|andr3a|angel|angelwhitehat|angie|anonghost|anonghostshell|an0n)\.php [NC,OR]
+	RewriteCond %{REQUEST_URI} (an0nym0us|anoncol7|anongt|anonym0us|anonymous|anzost|ars|b374k|beez|black|bloodsecv4|bump|byp|byp4ss|bypas|bypass|c22|c99|c100|cgi|changeall|cmd|cp|cpanel|cpn|cyber|d0mains|d4rk|dam|db|disqus|dom|drm|dz|dz0|egy|egyshell|eval|exp|exploit|exploits|f0x|fm|fox|foxx|fx|fx0|gaza|golge)\.php [NC,OR]
+	RewriteCond %{REQUEST_URI} (h4ck|h4cked|h4ntu|h4x|h4x0r|hack|hax|index1|indoxploit|info|inj3ct0r|ironshell|isko|islam|j3|jackal|jacker|jaguar|ja|jaja|jajaja|jar|java|javacpl|killer|king|ksa|l3b|ls|m1n1|madspot|madspotshell|m4r0c|marvins|mini|minishell|network|newshell|newup|nkr|olux|pr1v|press-this|priv8|r1z|r0k|r00t|r57|readme|root)\.php [NC,OR]
+	RewriteCond %{REQUEST_URI} (sado|sh3ll|shel|shell|smevk|sniper|sok|sym|sym403|sym404|symbpass|syml1nk|symlink|symlinkbypass|syrian_shell|t00|think|tmp|v4team|vuln)\.php [NC,OR]
+	RewriteCond %{REQUEST_URI} (w3br00t|webr00t|webroot|whmcrack|whmcracker|whmcs|wp-|ws0|wso|wsoshell|ws0shell|wso25|wsoshell|xa|xccc|xd|xx|xxx|zdz|zone-h)\.php [NC,OR]
+	RewriteCond %{REQUEST_URI} (admin2\.asp|alfa-shell-v4(.*)|blindshell\.c|cgishell\.pl|controller\.ashx|jaguar\.izri|perl\.alfa|xx\.pl) [NC]
+	RewriteRule .* //modules/ParsVT/errors/?log [END,NE,E=nG_REQUEST_URI:%1___%2___%3]
+</IfModule>
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+   php_flag display_errors Off
+   php_value max_execution_time 600
+   php_value max_input_time 600
+   php_value max_input_vars 10000
+   php_value memory_limit 512M
+   php_value post_max_size 256M
+   php_value session.gc_maxlifetime 21600
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php74"
+   php_value upload_max_filesize 128M
+   php_flag zlib.output_compression On
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_value max_execution_time 600
+   php_value max_input_time 600
+   php_value max_input_vars 10000
+   php_value memory_limit 512M
+   php_value post_max_size 256M
+   php_value session.gc_maxlifetime 21600
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php74"
+   php_value upload_max_filesize 128M
+   php_flag zlib.output_compression On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php74 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

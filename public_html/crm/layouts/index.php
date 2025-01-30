@@ -1,0 +1,1 @@
+<?php header("HTTP/1.1 403 Forbidden" ); header("location: ../test/VT7/modules/ParsVT/errors/"); exit; ?>

@@ -1,0 +1,8 @@
+li.highcharts-menu-item {
+	position: relative !important;
+}
+
+ul.highcharts-menu {
+	height: fit-content !important;
+	width: fit-content !important;
+}

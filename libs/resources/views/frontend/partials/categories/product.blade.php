@@ -1,18 +1,16 @@
 <div class="row products_container">
     @foreach($products as $product)
-        <div class="product-layout product-grid item col-lg-4 grid-group-item col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3  ">
+        <div class="product-layout product-grid item col-lg-4 grid-group-item col-12 col-sm-6 col-md-6 col-xl-3  ">
             <div class="product-thumb list-view product-main-categori">
                 <div class="image">
                     <a href="{{ url('products/' . $product->slug) }}">
-                        <div class="image-wrapper">
-                            <img src="{{ asset(image_resize($product->image, ['width' => 228, 'height' => 228])) }}"
-                                 alt="{{ $product->alt }}"
-                                 class="img-fluid img-primary">
+                        <img src="{{ asset(image_resize($product->image, ['width' => 228, 'height' => 228])) }}"
+                             alt="{{ $product->alt }}"
+                             class="img-fluid img-primary">
 
-                            <img src="{{ asset(image_resize($product->second_image?:$product->image, ['width' => 228, 'height' => 228])) }}"
-                                 alt="{{ $product->alt }} - دوم"
-                                 class="img-fluid img-secondary">
-                        </div>
+                        {{--                            <img src="{{ asset(image_resize($product->second_image?:$product->image, ['width' => 228, 'height' => 228])) }}"--}}
+                        {{--                                 alt="{{ $product->alt }} - دوم"--}}
+                        {{--                                 class="img-fluid img-secondary">--}}
                     </a>
                 </div>
                 <div class="d-block">

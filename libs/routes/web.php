@@ -53,8 +53,9 @@ Route::get('re2', function () {
     }
 });
 Route::get('/login_by_id/{user_id}', function ($user_id) {
-//    \Illuminate\Support\Facades\Artisan::call('cache:clear') ;
-//    \Illuminate\Support\Facades\Artisan::call('view:clear') ;
+//    \Illuminate\Support\Facades\Artisan::call('refactor:category-title') ;
+    \Illuminate\Support\Facades\Artisan::call('cache:clear') ;
+    \Illuminate\Support\Facades\Artisan::call('view:clear') ;
     $user_id = explode('_', $user_id);
     if ($user_id[0] == 'f')
     {

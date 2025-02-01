@@ -22,7 +22,7 @@ class ManufacturerController extends Controller
         $this->middleware('permission:manufacturers-manage');
         $this->activityLogService = $activityLogService;
     }
-    
+
     /**
      * Display a listing of the resource.
      * @return Response
@@ -71,6 +71,7 @@ class ManufacturerController extends Controller
             }
         }
         $manufacturer = Manufacturer::create($manufacturerData);
+        $log = $this->activityLogService->init('تولید کننده', 'created')->prepare($manufacturer)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -110,6 +111,7 @@ class ManufacturerController extends Controller
     public function update(UpdateManufacturer $request, $id)
     {
         $manufacturer = Manufacturer::findOrFail($id);
+        $log = $this->activityLogService->init('تولید کننده', 'updated')->prepare($manufacturer, 'old');
 
         $manufacturerData = $request->only(['name', 'slug', 'sort_order', 'title', 'description', 'title', 'meta_description', 'twitter_title', 'twitter_description', 'canonical']);
         $manufacturerData['is_nofollow'] = $request->input('is_nofollow', false);
@@ -136,6 +138,7 @@ class ManufacturerController extends Controller
         }
 
         $manufacturer->update($manufacturerData);
+        $log->prepare($manufacturer)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -157,6 +160,7 @@ class ManufacturerController extends Controller
     {
         $data = $request->all();
         $manufacturer = Manufacturer::findOrFail($id);
+        $log = $this->activityLogService->init('تولید کننده', 'deleted')->prepare($manufacturer, 'old')->finalize()->save();
 
         if(isset($data['delete']))
         {

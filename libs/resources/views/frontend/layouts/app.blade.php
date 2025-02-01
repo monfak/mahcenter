@@ -8,6 +8,7 @@
     @else
         <title>@yield('title', $site_settings['title']) - {{ $site_settings['name'] }}</title>
     @endif
+{{--    <meta content="width=device-width, initial-scale=1, user-scalable=yes" name="viewport">--}}
     <meta content="width=device-width, initial-scale=1, user-scalable=yes" name="viewport">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">

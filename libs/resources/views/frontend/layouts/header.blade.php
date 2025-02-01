@@ -137,8 +137,8 @@
     @if($notification->status)
         <div class="container-fluid ps-0 pe-0 banner-top">
             <a href="{{ $notification->orderedItems->first()->url }}" class="d-block">
-                <img src="{{ asset($notification->orderedItems->first()->image) }}" class="img-fluid w-100 d-none d-lg-block" alt="{{ $notification->orderedItems->first()->title }}"/>
-                <img src="{{ asset($notification->orderedItems->last()->image) }}" class="img-fluid w-100 d-xl-none d-lg-none" height="35" alt="{{ $notification->orderedItems->last()->title }}"/>
+                <img width="1343" height="48" src="{{ asset($notification->orderedItems->first()->image) }}" class="img-fluid w-100 d-none d-lg-block" alt="{{ $notification->orderedItems->first()->title }}"/>
+                <img width="900" height="35" src="{{ asset($notification->orderedItems->last()->image) }}" class="img-fluid w-100 d-xl-none d-lg-none" alt="{{ $notification->orderedItems->last()->title }}"/>
             </a>
         </div>
     @endif
@@ -167,7 +167,7 @@
       </div>
       <div class="col-2 text-end ps-0">
         <a href="{{ route('home') }}" class="d-inline-block logo-mob">
-          <img src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid" alt="مه سنتر"/>
+          <img width="128" height="63" src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid w-100" alt="مه سنتر"/>
         </a>
       </div>
     </div>
@@ -179,7 +179,7 @@
             <div class="d-flex flex-header">
               <div class="d-block">
                 <a href="{{ route('home') }}" class="d-inline-block logo">
-                  <img width="128" height="63" src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid" alt="مه سنتر"/>
+                  <img width="128" height="63" src="{{ asset('new-theme/images/logo.png') }}" class="img-fluid w-100" alt="مه سنتر"/>
                 </a>
               </div>
               <div class="position-relative search-desc">
@@ -342,7 +342,7 @@
                                   <a href="{{ route('category.desc', $category->slug) }}" data-index="{{ $category->id }}" class="c-navi-new-list__inner-category js-mega-menu-category{{ $loop->first ? ' c-navi-new-list__inner-category--hovered' : '' }}">
                                       @if($category->icon)
                                           <span class="ico-menu">
-                            <img width="28" height="28" src="{{ asset($category->icon) }}"  class="img-fluid" alt="{{ $category->name }}"/>
+                            <img width="28" height="28" src="{{ asset($category->icon) }}"  class="img-fluid w-100" alt="{{ $category->name }}"/>
                         </span>
                                       @endif
                                       {{ $category->name }}

@@ -587,7 +587,7 @@ class UpdateCategoryTitle extends Command
             'اسپرسوساز-بیشل',
         ];
         activity()->disableLogging();
-        $categories = Category::whereIn('slug', $slugs)->get();
+        $categories = Category::whereIn('slug', $slugs)->whereNull('slug')->get();
         $date = jdate(now())->format('F Y');
         foreach($categories as $category) {
             $title = 'خرید ' . $category->name . ' با ضمانت اصالت کالا - لیست قیمت ' . $date;

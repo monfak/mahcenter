@@ -428,7 +428,9 @@ function showAddToCartModal() {
                                     <div class="col-12 p-0 pt-3 text-center">
                                         <a href="{{ route('products.show', $relatedProduct->slug) }}"
                                            class="img-pro-wnd" target="_blank">
-                                          <img class="img-fluid" alt="{{ $relatedProduct->alt }}" src="{{ asset(image_resize($relatedProduct->image , ['width' => 233, 'height' => 220])) }}" >
+                                          <img class="img-fluid w-100" alt="{{ $relatedProduct->alt }}" src="{{ asset(image_resize($relatedProduct->image , ['width' => 233, 'height' => 220])) }}"
+                                               width="233" height="220"
+                                          >
                                         </a>
                                     </div>
                                 </div>
@@ -491,7 +493,7 @@ function showAddToCartModal() {
             <ul class="thumbnails">
                 <li style="position: relative;" class="big-images">
                     <a data-fancybox="mygallery" class="thumbnail first_thumbnail" href="{{ asset($product->image) }}">
-                        <img id="zoom_01" src="{{ asset($product->image) }}" alt="{{ $product->alt }}" class="img-fluid" data-zoom-image="{{ asset($product->image) }}" />
+                        <img id="zoom_01" width="364" height="364" src="{{ asset($product->image) }}" alt="{{ $product->alt }}" class="img-fluid w-100" data-zoom-image="{{ asset($product->image) }}" />
                     </a>
                 </li>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 slide-image2 ">
@@ -501,14 +503,14 @@ function showAddToCartModal() {
                                 <div class="item">
                                     <a data-fancybox="mygallery" class="thumbnail" big_image="{{ asset($product->image) }}"
                                         href="{{ asset($product->image) }}">
-                                        <img src="{{ asset($product->image) }}" alt="{{ $product->alt }}" />
+                                        <img  width="80" height="68" src="{{ asset($product->image) }}" alt="{{ $product->alt }}" />
                                     </a>
                                 </div>
                                 @foreach($product->images as $image)
                                 <div class="item">
                                     <a data-fancybox="mygallery" class="thumbnail" big_image="{{ asset($image->image) }}"
                                         href="{{ asset($image->image) }}">
-                                        <img src="{{ asset($image->image) }}" alt="{{ $image->alt }}" />
+                                        <img  width="80" height="68" src="{{ asset($image->image) }}" alt="{{ $image->alt }}" />
                                     </a>
                                 </div>
                                 @endforeach
@@ -582,7 +584,7 @@ function showAddToCartModal() {
                             <li class="js-c-ui-variant optionWrapper">
                                 <label class="c-ui-variant c-ui-variant--color" data-code="#212121">
                                     @if($warranty->image)
-                                    <img src="{{ asset(image_resize($warranty->image, ['width' => 17, 'height' => 17])) }}" alt="{{ $warranty->name }}">
+                                    <img  width="17" height="17" src="{{ asset(image_resize($warranty->image, ['width' => 17, 'height' => 17])) }}" alt="{{ $warranty->name }}">
                                     @endif
                                     <input type="radio" value="{{ $warranty->id }}" data-name="{{ $warranty->name }}" data-price="{{ number_format(($product->special ?? $product->price) + $warranty->price, 0, '.', ',')}}" data-opt="{{ $warranty->id }}" data-operation="{{ $product->id }}" name="warranty_id" class="js-variant-selector productOptionInput warrantyPrice"{{ $loop->last ? ' checked' : '' }}>
                                     <span class="c-ui-variant__check">{{ $warranty->name }}</span>
@@ -786,7 +788,7 @@ function showAddToCartModal() {
                 <div class="c-product__feature-col">
                     <a href="{{ $item->url }}" target="_blank"
                         class="c-product__feature-item c-product__feature-item--1" title="{!! $item->title !!}">
-                        <span class="icon"><img src="{{ asset($item->image) }}" alt="{!! $item->title !!}"></span>
+                        <span class="icon"><img  width="50" height="34" src="{{ asset($item->image) }}" alt="{!! $item->title !!}"></span>
                         <span>{!! $item->title !!}</span>
                     </a>
                 </div>
@@ -873,7 +875,7 @@ function showAddToCartModal() {
                                         <div class="col-12 p-0 pt-3 text-center">
                                             <a href="{{ route('products.show', $suggestedProduct->slug) }}"
                                                class="img-pro-wnd" target="_blank">
-                                              <img class="img-fluid" alt="{{ $suggestedProduct->name }}" src="{{ asset(image_resize($suggestedProduct->image , ['width' => 233, 'height' => 220])) }}" >
+                                              <img width="233" height="220" class="img-fluid" alt="{{ $suggestedProduct->name }}" src="{{ asset(image_resize($suggestedProduct->image , ['width' => 233, 'height' => 220])) }}" >
                                             </a>
                                         </div>
                                     </div>

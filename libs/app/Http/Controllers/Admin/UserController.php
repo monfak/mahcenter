@@ -10,18 +10,22 @@ use App\Models\City;
 use App\Models\Province;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * UserController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:users-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     /**
@@ -88,6 +92,8 @@ class UserController extends Controller
             $user->syncRoles([$role->name]);
         }
 
+        $log = $this->activityLogService->init('کاربر', 'created')->prepare($user)->finalize()->save();
+
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -132,6 +138,7 @@ class UserController extends Controller
     public function update(UpdateUser $request, $id)
     {
         $user   = User::findOrFail($id);
+        $log = $this->activityLogService->init('کاربر', 'updated')->prepare($user, 'old');
 
         $user->first_name       = $request->input('first_name');
         $user->last_name        = $request->input('last_name');
@@ -148,6 +155,8 @@ class UserController extends Controller
             $userRoles = [$role->name];
         }
         $user->syncRoles($userRoles);
+        
+        $log->prepare($user)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -167,8 +176,9 @@ class UserController extends Controller
     {
         $data = $request->all();
         $user = User::findOrFail($id);
+        $log = $this->activityLogService->init('کاربر', 'deleted')->prepare($user, 'old')->finalize()->save();
 
-        if ( isset($data['delete'] ))
+        if(isset($data['delete']))
         {
             $user->delete();
         }

@@ -6,22 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\City;
 use App\Http\Requests\DistrictRequest;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class DistrictController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ProductController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:districts-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     public function index()
     {
-           return view('admin.districts.index');
+        return view('admin.districts.index');
     }
 
     public function ajax()
@@ -60,6 +64,7 @@ class DistrictController extends Controller
     public function store(DistrictRequest $request)
     {
         $district = District::query()->create($request->validated());
+        $log = $this->activityLogService->init('محله', 'created')->prepare($district)->finalize()->save();
         success('محله ' . $district->name . ' با موفقیت ایجاد شد.');
         return redirect()->route('admin.districts.index');
     }
@@ -90,7 +95,9 @@ class DistrictController extends Controller
      */
     public function update(DistrictRequest $request, District $district)
     {
+        $log = $this->activityLogService->init('محله', 'updated')->prepare($district, 'old');
         $district->update($request->validated());
+        $log->prepare($district)->finalize()->save();
         success('محله ' . $district->name . ' با موفقیت آپدیت شد.');
         return redirect()->route('admin.districts.index');
     }
@@ -106,6 +113,7 @@ class DistrictController extends Controller
     {
         $data = $request->all();
         $district = District::findOrFail($id);
+        $log = $this->activityLogService->init('محله', 'deleted')->prepare($district, 'old')->finalize()->save();
         $district->delete();
         success();
         return redirect()->route('admin.districts.index');

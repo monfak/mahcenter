@@ -14,6 +14,8 @@ use App\Http\Requests\UpdateManufacturer;
 
 class ManufacturerController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ManufacturerController constructor.
      */

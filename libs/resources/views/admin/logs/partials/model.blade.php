@@ -116,6 +116,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $id }}</td>
                     <td>
+                    @if(isset($row['old']) && $row['old'])
                         @foreach($row['old'] as $key => $value)
                             @unless($loop->first) <br> @endunless
                             @if(is_array($value))
@@ -127,8 +128,10 @@
                                 {{ $log->subject->getLabel($key) }}: <strong>{{ $value }}</strong>
                             @endif
                         @endforeach
+                    @endif
                     </td>
                     <td>
+                    @if(isset($row['new']) && $row['new'])
                         @foreach($row['new'] as $key => $value)
                             @unless($loop->first) <br> @endunless
                             @if(is_array($value))
@@ -140,6 +143,7 @@
                                 {{ $log->subject->getLabel($key) }}: <strong>{{ $value }}</strong>
                             @endif
                         @endforeach
+                    @endif
                     </td>
                 </tr>
             @endforeach

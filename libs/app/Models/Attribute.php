@@ -15,7 +15,7 @@ class Attribute extends Model
     {
         parent::boot();
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderByRaw('ISNULL(sort_order), sort_order ASC');
+            $builder->orderByRaw('ISNULL(sort_order), sort_order DESC');
         });
     }
 

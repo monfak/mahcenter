@@ -8,6 +8,7 @@ use App\Models\Note;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
@@ -15,12 +16,15 @@ use Sms;
 
 class OrderController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * OrderController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:orders-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -86,6 +90,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         if (in_array($request->status, [0, 1, 2, 3, 4, 5])) {
+            $log = $this->activityLogService->init('سفارش', 'updated')->prepare($order, 'old');
             if($request->status == Order::STATUS_SENT && $order->status != Order::STATUS_SENT) {
                 $user = $order->user;
                 $message = 'سفارش شما در وضعیت ارسال شده قرار گرفت.';
@@ -95,6 +100,7 @@ class OrderController extends Controller
             }
             $order->status = $request->status;
             $order->save();
+            $log->prepare($order)->finalize()->save();
             success("سفارش مورد نظر با موفقیت بروزرسانی گردید.");
         }
         return redirect()->route('admin.orders.index');
@@ -137,6 +143,7 @@ class OrderController extends Controller
     {
         $data   = $request->all();
         $order  = Order::findOrFail($id);
+        $log = $this->activityLogService->init('سفارش', 'deleted')->prepare($order, 'old')->finalize()->save();
 
         if ( isset($data['delete'] ))
         {

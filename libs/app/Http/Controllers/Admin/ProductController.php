@@ -55,14 +55,14 @@ class ProductController extends Controller
     public function ajax($category,$quantity)
     {
         if($category == 0) {
-            $products = DB::table('products')->select('products.id', 'products.image', 'products.created_at', 'products.updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status','products.dev_title');
+            $products = DB::table('products')->select('products.id', 'products.image', 'products.created_at', 'products.manual_updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status','products.dev_title');
             if($quantity == 1) {
                 $products = $products ->where('stock', '!=', 0);
             } else if($quantity == 2) {
                 $products = $products ->where('stock', '=', 0);
             }
         } else {
-            $products = DB::table('products')->join('category_product', 'products.id', '=', 'category_product.product_id')->where('category_id','=',$category)->select('products.id', 'products.image', 'products.created_at', 'products.updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status');
+            $products = DB::table('products')->join('category_product', 'products.id', '=', 'category_product.product_id')->where('category_id','=',$category)->select('products.id', 'products.image', 'products.created_at', 'products.manual_updated_at', 'products.name', 'products.slug', 'products.model', 'products.price', 'products.special', 'products.stock', 'products.status');
             if($quantity == 1){
                 $products = $products ->where('stock', '!=', 0);
             } else if($quantity == 2){
@@ -85,8 +85,8 @@ class ProductController extends Controller
             ->editColumn('created_at', function ($product) {
                 return jdate($product->created_at)->format('d F Y ساعت H:i');
             })
-            ->editColumn('updated_at', function ($product) {
-                return jdate($product->updated_at)->format('d F Y ساعت H:i');
+            ->editColumn('manual_updated_at', function ($product) {
+                return jdate($product->manual_updated_at)->format('d F Y ساعت H:i');
             })
             ->editColumn('status', function ($product) {
                 return $product->status ? '<span class="label label-success">فعال</span>' : '<span class="label label-warning">غیرفعال</span>';
@@ -135,6 +135,7 @@ class ProductController extends Controller
         $productData['is_festival'] = $request->input('is_festival', false);
         $productData['is_available'] = $request->input('is_available', false);
         $productData['required_national_id'] = $request->input('required_national_id', false);
+        $productData['manual_updated_at'] = now();
         if ($request->hasFile('image')) {
             $name = pathinfo($request->image->getClientOriginalName(), PATHINFO_FILENAME);
             if ($request->image->storeAs('public/images/products/' . date('Y/m'), $name . '.' . $request->image->getClientOriginalExtension())) {
@@ -594,6 +595,7 @@ class ProductController extends Controller
         $product->required_national_id = $request->input('required_national_id', false);
         $product->is_festival = $request->input('is_festival', false);
         $product->is_available = $request->input('is_available', false);
+        $product->manual_updated_at = now();
 
         if ($request->input('special')) {
             $product->special = $request->input('special');
@@ -805,8 +807,8 @@ class ProductController extends Controller
                 $highlightedAttributes[] = $attribute['id'];
             }
         }
-        $pros           =Product::where('id','!=',$product->id)->get();
-        $products     = [];
+        $pros = Product::where('id','!=',$product->id)->get();
+        $products = [];
         foreach ($pros as $pro) {
             $products[$pro->id] = "{$pro->name} ({$pro->slug})";
         }
@@ -828,6 +830,7 @@ class ProductController extends Controller
         $productData['discount'] = null;
         $productData['colleague_price'] = null;
         $productData['image'] = $product->image;
+        $productData['manual_updated_at'] = now();
         if ($request->hasFile('image')) {
             $name = pathinfo($request->image->getClientOriginalName(), PATHINFO_FILENAME);
             if ($request->image->storeAs('public/images/products/' . date('Y/m'), $name . '.' . $request->image->getClientOriginalExtension())) {
@@ -969,6 +972,7 @@ class ProductController extends Controller
             $log = $this->activityLogService->init('محصول', 'updated')->prepare($product, 'old');
             $productData['price'] = $request->input('price', $product->price);
             $productData['special'] = $request->input('special', $product->special);
+            $productData['manual_updated_at'] = now();
             if($request->input('special')) {
                 $productData['discount'] = (int) round(100 - $productData['special'] * 100 / $productData['price']);
             }
@@ -983,7 +987,7 @@ class ProductController extends Controller
     {
         if ($product) {
             $log = $this->activityLogService->init('محصول', 'updated')->prepare($product, 'old');
-            $product->update(['stock' => $request->input('stock', $product->stock)]);
+            $product->update(['stock' => $request->input('stock', $product->stock), 'manual_updated_at' => now()]);
             $log->prepare($product)->finalize()->save();
             return response()->json(['success' => true]);
         }

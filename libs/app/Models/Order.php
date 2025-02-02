@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LoggableRelations;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class Order extends Model
 {
+    use LoggableRelations;
+    
     const STATUS_EXPIRED    = 0;
     const STATUS_PENDING    = 1;
     const STATUS_SENDING    = 2;
@@ -22,6 +25,35 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'address_id',
+        'delivery_method_id',
+        'tracking_code',
+        'mobile',
+        'product_total',
+        'discount',
+        'total',
+        'description',
+        'user_ip',
+        'user_agent',
+        'cash_on_delivery',
+        'discount_details',
+        'status',
+        'products_total_price',
+        'shipping_cost',
+        'tax',
+        'total_price',
+        'first_name',
+        'last_name',
+        'name',
+        'is_sale_calculated',
+        'is_guest',
+    ];
+    
+    protected $logRelations = [
+        'user' => ['id', 'name'],
+        'address' => ['id', 'name'],
+    ];
+    
+    protected $logOnly = [
         'tracking_code',
         'mobile',
         'product_total',
@@ -38,8 +70,53 @@ class Order extends Model
         'first_name',
         'last_name',
         'name',
-        'is_sale_calculated',
         'is_guest',
+    ];
+    
+    protected $translations = [
+        'id' => 'آی دی',
+        'user_id' => 'کاربر',
+        'address_id' => 'آدرس',
+        'tracking_code' => 'کد پیگیری',
+        'mobile' => 'mobile',
+        'product_total' => 'جمع هزینه محصولات',
+        'discount' => 'تخفیف',
+        'total' => 'جمع کل',
+        'description' => 'توضیحات کاربر',
+        'user_ip' => 'آی پی',
+        'user_agent' => 'مشخصات سیستم کاربر',
+        'cash_on_delivery' => 'پرداخت در محل',
+        'discount_details' => 'جزئیات تخفیف',
+        'status' => 'وضعیت',
+        'products_total_price' => 'جمع هزینه محصولات',
+        'total_price' => 'جمع کل',
+        'first_name' => 'نام',
+        'last_name' => 'نام خانوادگی',
+        'name' => 'نام کامل',
+        'is_guest' => 'کاربر مهمان است',
+    ];
+    
+    protected $type = [
+        'user_id' => 'relation',
+        'address_id' => 'relation',
+        'tracking_code' => 'string',
+        'mobile' => 'string',
+        'product_total' => 'price',
+        'discount' => 'price',
+        'total' => 'price',
+        'description' => 'string',
+        'user_ip' => 'string',
+        'user_agent' => 'string',
+        'cash_on_delivery' => 'boolean',
+        'discount_details' => 'string',
+        'status' => 'integer',
+        'products_total_price' => 'price',
+        'total_price' => 'price',
+        'first_name' => 'string',
+        'last_name' => 'string',
+        'name' => 'string',
+        'is_sale_calculated' => 'boolean',
+        'is_guest' => 'boolean',
     ];
 
     public function user()
@@ -50,6 +127,11 @@ class Order extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+    
+    public function deliveryMethod()
+    {
+        return $this->belongsTo(DeliveryMethod::class);
     }
 
     public function manufacturers()

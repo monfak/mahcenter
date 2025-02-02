@@ -7,17 +7,21 @@ use App\Models\Menu;
 use App\Models\MenuItems;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class MenuItemController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * CategoryController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:menus-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -93,6 +97,7 @@ class MenuItemController extends Controller
             }
         }
         $item = $menu->items()->create($itemData);
+        $log = $this->activityLogService->init('ایتم منو', 'created')->prepare($item)->finalize()->save();
         success("آیتم $item->name ایجاد شد.");
         return redirect()->route('admin.menus.items.index', $menu->id);
     }
@@ -132,6 +137,7 @@ class MenuItemController extends Controller
      */
     public function update(MenuItemRequest $request, MenuItems $item)
     {
+        $log = $this->activityLogService->init('آیتم منو', 'updated')->prepare($item, 'old');
         $itemData  = $request->only(['heading', 'label', 'url', 'parent_id',  'sort_order']);
         $itemData['is_active'] = $request->input('is_active', false);
         if($request->hasFile('image'))
@@ -151,6 +157,7 @@ class MenuItemController extends Controller
             $itemData['image'] = NUll;
         }
         $item->update($itemData);
+        $log->prepare($item)->finalize()->save();
         success('آیتم با موفقیت آپدیت شد.');
         return redirect()->route('admin.menus.items.index', $item->menu_id);
     }
@@ -164,6 +171,7 @@ class MenuItemController extends Controller
      */
     public function destroy(Request $request, MenuItems $item)
     {
+        $log = $this->activityLogService->init('آیتم منو', 'deleted')->prepare($item, 'old')->finalize()->save();
         $menu_id = $item->menu_id;
         $item->delete();
         success('منو با موفقیت حذف شد.');

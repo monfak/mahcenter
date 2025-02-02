@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Requests\DetailsGuestRequest;
 use App\Models\Address;
 use App\Models\City;
+use App\Models\DeliveryMethod;
 use App\Models\Page;
 use App\Models\Product;
 use App\Services\CartService;
@@ -106,12 +107,25 @@ class DetailController extends Controller
         $cities = Cache::remember('ordered-cities', now()->addMinutes(5), function () {
             return City::query()->oldest('name')->get();
         });
+        $deliveryMethods = Cache::remember('delivery-methods', now()->addMinutes(5), function () {
+            return DeliveryMethod::query()->oldest()->active()->get();
+        });
+        $coverAllMethods = [];
+        $specificMethods = [];
+        
+        foreach ($deliveryMethods as $method) {
+            if ($method->is_cover_all) {
+                $coverAllMethods[] = $method;
+            } else {
+                $specificMethods[] = $method;
+            }
+        }
         $shippingPricePage = Cache::remember('shipping-price-page', now()->addMinutes(5), function() {
             return Page::query()
                 ->where('slug', 'هزینه-ارسال')
                 ->first();
         });
-        return view('frontend.details.index', compact('products', 'totalSum', 'shippingPrice', 'user', 'addresses', 'totalDiscount', 'cart', 'cartAddress', 'cities', 'shippingPricePage'));
+        return view('frontend.details.index', compact('products', 'totalSum', 'shippingPrice', 'user', 'addresses', 'totalDiscount', 'cart', 'cartAddress', 'cities', 'deliveryMethods', 'coverAllMethods', 'specificMethods', 'shippingPricePage'));
     }
 
     public function store(Request $request)

@@ -7,18 +7,22 @@ use App\Models\Slide;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 
 class SlideController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * SlideController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:slider-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -62,6 +66,7 @@ class SlideController extends Controller
             }
         }
         $slider = Slide::create($sliderData);
+        $log = $this->activityLogService->init('اسلایدر', 'created')->prepare($slider)->finalize()->save();
 
         success('اسلاید با موفقیت به اسلایدر اضافه شد.');
         return redirect()->route('admin.slides.index');
@@ -95,6 +100,7 @@ class SlideController extends Controller
      */
     public function update(SlideRequest $request, Slide $slide)
     {
+        $log = $this->activityLogService->init('اسلایدر', 'updated')->prepare($slide, 'old');
         $sliderData = $request->only(['heading', 'alt', 'url', 'content', 'sort_order']);
         $sliderData['is_active'] = $request->input('is_active', false);
         if($request->hasfile('image'))
@@ -107,7 +113,7 @@ class SlideController extends Controller
             }
         }
         $slide->update($sliderData);
-
+        $log->prepare($slide)->finalize()->save();
         success("اسلاید به موفقیت به اسلایدر اضافه شد.");
         return redirect()->route('admin.slides.index');
     }
@@ -120,7 +126,9 @@ class SlideController extends Controller
      */
     public function destroy($id)
     {
-        Slide::findOrFail($id)->delete();
+        $slider = Slide::findOrFail($id);
+        $log = $this->activityLogService->init('اسلایدر', 'deleted')->prepare($slider, 'old')->finalize()->save();
+        $slider->delete();
         success('اسلاید با موفقیت حذف شد.');
         return redirect()->route('admin.slides.index');
     }

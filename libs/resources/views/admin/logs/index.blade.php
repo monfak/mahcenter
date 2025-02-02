@@ -50,14 +50,20 @@
         };
     </script>
     <script type="text/javascript">
-        $('#logs').DataTable({
+        let table = $('#logs').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '/admin/logs',
+            ajax: {
+                url: '/admin/logs',
+                type: 'GET',
+                data: function (d) {
+                    d.userName = $('#user_name').val();
+                }
+            },
             columns: [
                 {data: 'log_name', name: 'log_name'},
                 {data: 'description', name: 'description'},
-                {data: 'causer', name: 'causer'},
+                {data: 'causer', name: 'causer.name'},
                 {data: 'created_at', name: 'created_at', searchable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false},
             ],
@@ -68,6 +74,9 @@
             "buttons": [ 'copy', 'excel', 'pdf', 'colvis' ],
             "pagingType": "simple_numbers_no_ellipses"
         });
+        $('#user_name').on('keyup change', function () {
+            table.ajax.reload();
+        });
     </script>
 @endsection 
 @section('content')
@@ -76,6 +85,13 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">لاگ‌ها</h3>
+                <div class="box-tools">
+                    <div class="input-group input-group-sm">
+                        <div class="btn-group">
+                            <input type="text" name="user_name" id="user_name" class="form-control" placeholder="نام کاربر">
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">

@@ -275,9 +275,9 @@
                                                 <div class="col-12">
                                                     <input type="text" name="national_code" value="{{ old('national_code', auth()->user()->national_code) }}" dir="ltr" placeholder="کدملی" id="national_code" class="form-control">
                                                     @if ($requiresNationalId)
-                                                        <span class="text-danger" role="alert">
-                                                            <strong>برای فعالسازی گارانتی محصول : {{ $requiresNationalIdProducts }} پر کردن کدملی اجباری است !</strong>
-                                                        </span>
+                                                        <small class="text-muted">
+                                                            برای فعالسازی گارانتی محصول : {{ $requiresNationalIdProducts }} پر کردن کدملی اجباری است!
+                                                        </small
                                                     @endif
                                                     @if ($errors->has('national_code'))
                                                         <span class="text-danger" role="alert">

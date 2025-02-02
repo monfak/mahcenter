@@ -1,20 +1,16 @@
-
 <div  id="productCompareModal" tabindex="-1" role="dialog" aria-labelledby="productModalCenterTitle"
   aria-hidden="true" >
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="productModalLongTitle">جستجو</h5>
-        <form id="compare-search">
-          <input type="text" name="search" id="keyword">
-          <!--<select name="brand" id="brand">-->
-          <!--  <option value="">تمامی برندها</option>-->
-          <!--  <option value="13918">بیم</option>-->
-          <!--  <option value="28119">کوخ</option>-->
-          <!--  <option value="14515">سنکور</option>-->
-          <!--  <option value="21426">اسمگ</option>-->
-          <!--  <option value="27559">نینجا</option>-->
-          <!--</select>-->
+        <form id="compare-search" style="width:85%">
+            <div id="compare-search-container" class="input-group">
+              <input type="text" class="form-control" name="search" id="keyword" placeholder="جستجو کنید...">
+              <span class="input-group-text" id="search-icon">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
         </form>
         <script>
            //setup before functions
@@ -75,9 +71,6 @@
                               }
                           });
                   } else{
-                    
-                     
-                          
                     //   $('#products_compare').css("display", "none");
                   }
               }
@@ -87,46 +80,43 @@
         </button>
       </div>
         @if( $product_all && count($product_all)>0)
-               <div class="modal-body" id="products_compare">
-                  @include('frontend.partials.compare-product',['products'=>$product_all])
-                </div>
+            <div class="modal-body" id="products_compare" style="padding: 1rem 0 1rem 0">
+                @include('frontend.partials.compare-product', ['products' => $product_all])
+            </div>
         @endif
     </div>
   </div>
 </div>
 <script>
-    $.ajaxSetup({
+$.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
 
-    $('.addToCompare1').submit(function(e) {
-        $('.loader').fadeIn();
-        e.preventDefault();
-        var form=$(this);
-        var data = form.serialize();
-        var productId = $(this).find('.productId').val();
-        $.ajax({
-            type: 'POST',
-            url: "/compare/add/" + productId,
-            data:{
-                data:data
-            },
-
-            success: function(message) {
-                $('.loader').fadeOut();
-                // Set sth
-        window.location.reload();
-            },
-            error: function(e) {
-                // Set sth
-                swal({
-                    text: 'متاسفانه مشکلی در افزودن محصول به بخش مقایسه پیش آمد.',
-                    icon: "warning",
-                    button: 'متوجه شدم'
-                });
-            }
-        });
+$('.addToCompare1').submit(function(e) {
+    $('.loader').fadeIn();
+    e.preventDefault();
+    var form=$(this);
+    var data = form.serialize();
+    var productId = $(this).find('.productId').val();
+    $.ajax({
+        type: 'POST',
+        url: "/compare/add/" + productId,
+        data:{
+            data:data
+        },
+        success: function(message) {
+            $('.loader').fadeOut();
+            window.location.reload();
+        },
+        error: function(e) {
+            swal({
+                text: 'متاسفانه مشکلی در افزودن محصول به بخش مقایسه پیش آمد.',
+                icon: "warning",
+                button: 'متوجه شدم'
+            });
+        }
     });
+});
 </script>

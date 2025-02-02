@@ -6,17 +6,21 @@ use App\Models\InstallmentPlan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class InstallmentPlanController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * InstallmentPlanController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:installments-plans');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -48,6 +52,7 @@ class InstallmentPlanController extends Controller
         $planData = $request->only(['name', 'sort_order']);
         $planData['is_active'] = $request->input('is_active', false);
         $plan = InstallmentPlan::create($planData);
+        $log = $this->activityLogService->init('پلن اقساط', 'created')->prepare($plan)->finalize()->save();
         success('پلن با موفقیت ایجاد گردید.');
         return redirect()->route('admin.installments.plans.index');
     }
@@ -81,10 +86,12 @@ class InstallmentPlanController extends Controller
     public function update(Request $request, $id)
     {
         $plan = InstallmentPlan::findOrFail($id);
+        $log = $this->activityLogService->init('پلن اقساط', 'updated')->prepare($plan, 'old');
         $plan->name         = $request->input('name');
         $plan->sort_order   = $request->input('sort_order');
         $plan->is_active    = $request->input('is_active', false);
         $plan->save();
+        $log->prepare($plan)->finalize()->save();
         success('پلن با موفقیت آپدیت شد.');
         return redirect()->route('admin.installments.plans.index');
     }
@@ -100,6 +107,8 @@ class InstallmentPlanController extends Controller
     {
         $data = $request->all();
         $plan = InstallmentPlan::findOrFail($id);
+        $log = $this->activityLogService->init('پلن اقساط', 'deleted')->prepare($plan, 'old');
+        $log->prepare($plan)->finalize()->save();
         $plan->delete();
         success('پلن اقساط با موفقیت حذف گردید.');
         return redirect()->route('admin.installments.plans.index');

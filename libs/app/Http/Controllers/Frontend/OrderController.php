@@ -40,6 +40,9 @@ class OrderController extends Controller
 
         // Check if any product in the cart requires a national ID
         $requiresNationalId = false;
+        $user = Auth::user();
+        $userHasNationalId = $user && !empty($user->national_code);
+        
         foreach ($cart->items as $cartItem)
         {
             if ($cartItem->product->required_national_id)
@@ -48,28 +51,27 @@ class OrderController extends Controller
                 break;
             }
         }
-        if ($requiresNationalId && empty($request->input('national_code')) && false)
-        {
+        if ($requiresNationalId && !$userHasNationalId && empty($request->input('national_code'))) {
             error('فیلد کد ملی اجباری است!');
-
+        
             return redirect()->route('checkout');
         }
         // Apply discount code logic (consider extracting this into a separate service if reusable)
-        /**if ($request->input('discount') == 'discount' && $request->input('discountCode')) {
-         * $code = Code::where('code', $request->input('discountCode'))
-         * ->where('used', false)
-         * ->with('discount')
-         * ->first();
-         *
-         * if ($code && $code->discount->end_date > now() && now() >= $code->discount->start_date) {
-         * session(['discountId' => $code->discount->id, 'codeId' => $code->id]);
-         * success('کد تخفیف اعمال شد.');
-         * return back()->withInput();
-         * }
-         *
-         * doneMessage('کد تخفیف معتبر نیست.', 'error');
-         * return back()->withInput();
-         * }**/
+        if ($request->input('discount') == 'discount' && $request->input('discountCode')) {
+          $code = Code::where('code', $request->input('discountCode'))
+          ->where('used', false)
+          ->with('discount')
+          ->first();
+         
+          if ($code && $code->discount->end_date > now() && now() >= $code->discount->start_date) {
+              session(['discountId' => $code->discount->id, 'codeId' => $code->id]);
+              success('کد تخفیف اعمال شد.');
+              return back()->withInput();
+          }
+         
+          doneMessage('کد تخفیف معتبر نیست.', 'error');
+          return back()->withInput();
+        }
         if (auth()->check())
         {
             $user = auth()->user();

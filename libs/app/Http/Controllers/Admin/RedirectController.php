@@ -11,17 +11,21 @@ use Illuminate\Support\Str;
 use App\Models\Redirect;
 use App\Http\Requests\StoreRedirect;
 use App\Http\Requests\UpdateRedirect;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class RedirectController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * RedirectController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:redirects-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -63,6 +67,7 @@ class RedirectController extends Controller
     public function store(StoreRedirect $request)
     {
         $redirect = Redirect::create($request->only(['old', 'url', 'type']));
+        $log = $this->activityLogService->init('ریدایرکت', 'created')->prepare($redirect)->finalize()->save();
         success('ریدایرکت مورد نظر با موفقیت ایجاد شد.');
         return redirect()->route('admin.redirects.index');
     }
@@ -95,14 +100,16 @@ class RedirectController extends Controller
      */
     public function update(UpdateRedirect $request, Redirect $redirect)
     {
+        $log = $this->activityLogService->init('ریدایرکت', 'updated')->prepare($redirect, 'old');
         $redirect->update($request->only(['old', 'url', 'type']));
+        $log->prepare($redirect)->finalize()->save();
         success('ریدایرکت با موفقیت آپدیت شد.');
         return redirect()->route('admin.redirects.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
+     * 
      * @param Request $request
      * @param Integer $id Identifier of the redirect
      * @return Response
@@ -111,6 +118,7 @@ class RedirectController extends Controller
     {
         $data = $request->all();
         $redirect = Redirect::findOrFail($id);
+        $log = $this->activityLogService->init('ریدایرکت', 'deleted')->prepare($redirect, 'old')->finalize()->save();
         $redirect->delete();
         success();
         return redirect()->route('admin.redirects.index');

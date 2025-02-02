@@ -11,10 +11,12 @@ use Illuminate\Support\Str;
 use App\Models\Warranty;
 use App\Services\ActivityLogService;
 use App\Http\Requests\WarrantyRequest;
-
+use App\Services\ActivityLogService;
 
 class WarrantyController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ArticleController constructor.
      */
@@ -84,8 +86,7 @@ class WarrantyController extends Controller
             }
         }
         $warranty = Warranty::create($warrantyData);
-        $log = $this->activityLogService->init('warranty', $warranty, 'created');
-        $log->save();
+        $log = $this->activityLogService->init('گارانتی', 'created')->prepare($warranty)->finalize()->save();
         success("گارانتی  {$warranty->name} با موفقیت ایجاد شد.");
         return redirect()->route('admin.warranties.index');
     }
@@ -119,6 +120,7 @@ class WarrantyController extends Controller
     public function update(WarrantyRequest $request, $id)
     {
         $warranty = Warranty::query()->find($id);
+        $log = $this->activityLogService->init('گارانتی', 'updated')->prepare($warranty, 'old');
         $warrantyData = $request->only(['name', 'slug', 'content', 'title', 'description', 'price', 'twitter_title', 'twitter_description', 'canonical']);
         $warrantyData['is_nofollow'] = $request->input('is_nofollow', false);
         $warrantyData['is_noindex'] = $request->input('is_noindex', false);
@@ -153,8 +155,7 @@ class WarrantyController extends Controller
             }
         }
         $warranty->update($warrantyData);
-        $log = $this->activityLogService->init('warranty', $warranty, 'updated');
-        $log->save();
+        $log->prepare($warranty)->finalize()->save();
         success("گارانتی {$warranty->name} با موفقیت آپدیت شد.");
         return redirect()->route('admin.warranties.index');
     }
@@ -170,8 +171,7 @@ class WarrantyController extends Controller
     {
         $data = $request->all();
         $warranty = Warranty::findOrFail($id);
-        $log = $this->activityLogService->init('warranty', $warranty, 'deleted');
-        $log->save();
+        $log = $this->activityLogService->init('گارانتی', 'deleted')->prepare($warranty, 'old')->finalize()->save();
         $warranty->delete();
         success('گارانتی با موفقیت حذف گردید.');
         return redirect()->route('admin.warranties.index');

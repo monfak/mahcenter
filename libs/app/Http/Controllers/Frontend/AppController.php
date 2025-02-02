@@ -140,6 +140,7 @@ class AppController extends Controller
             ->where('stock', '>', 0)
             ->notFestival()
             ->inRandomOrder()
+            ->take(8)
             ->get();
         });
         $specialSales = Cache::remember('special-sales', now()->addMinutes(5), function () {

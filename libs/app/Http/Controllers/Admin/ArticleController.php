@@ -21,6 +21,8 @@ use Yajra\DataTables\DataTables;
 
 class ArticleController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ArticleController constructor.
      */
@@ -110,6 +112,8 @@ class ArticleController extends Controller
         $article->faqs()->sync($request->input('faqs_id', []));
         $article->products()->sync($request->input('products_id', []));
         $article->relates()->sync($request->input('relate_id', []));
+        $article->refresh();
+        $log = $this->activityLogService->init('مقاله', 'created')->prepare($article)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -182,11 +186,12 @@ class ArticleController extends Controller
                 $articleData['twitter_image'] = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->twitter_image->getClientOriginalExtension();
             }
         }
+        $log = $this->activityLogService->init('مقاله', 'updated')->prepare($article, 'old');
         $article->update($articleData);
         $article->faqs()->sync($request->input('faqs_id', []));
         $article->products()->sync($request->input('products_id', []));
         $article->relates()->sync($request->input('relate_id', []));
-
+        $log->prepare($article)->finalize()->save();
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -206,6 +211,7 @@ class ArticleController extends Controller
     public function destroy(Request $request, $id)
     {
         $data = $request->all();
+        $log = $this->activityLogService->init('مقاله', 'deleted')->prepare($article, 'old')->finalize()->save();
         $article = Article::findOrFail($id);
         $article->delete();
         success('مقاله با موفقیت حذف گردید.');

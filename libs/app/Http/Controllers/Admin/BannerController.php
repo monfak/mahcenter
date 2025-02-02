@@ -11,16 +11,21 @@ use App\Http\Requests\StoreBanner;
 use App\Models\Banner;
 use App\Models\BannerItem;
 use App\Http\Requests\UpdateBanner;
+use App\Services\ActivityLogService;
 use Intervention\Image\Facades\Image;
 
 class BannerController extends Controller
 {
+    
+    protected $activityLogService;
+    
     /**
      * BannerController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:banners-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -92,6 +97,8 @@ class BannerController extends Controller
         }
 
         BannerItem::insert($banners);
+        
+        $log = $this->activityLogService->init('بنر', 'created')->prepare($banner)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -130,6 +137,7 @@ class BannerController extends Controller
     public function update(UpdateBanner $request, $id)
     {
         $banner = Banner::findOrFail($id);
+        $log = $this->activityLogService->init('بنر', 'updated')->prepare($banner, 'old');
 
         $banner->name = $request->input('name');
         $banner->position = $request->input('position');
@@ -215,6 +223,8 @@ class BannerController extends Controller
 
         BannerItem::insert($banners);
 
+        $log->prepare($banner)->finalize()->save();
+        
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -235,6 +245,7 @@ class BannerController extends Controller
     {
         $data = $request->all();
         $banner = Banner::findOrFail($id);
+        $log = $this->activityLogService->init('بنر', 'deleted')->prepare($banner, 'old')->finalize()->save();
         $banner->delete();
         success();
         return redirect()->route('admin.banners.index');

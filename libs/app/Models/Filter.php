@@ -22,7 +22,7 @@ class Filter extends Model
     {
         parent::boot();
         static::addGlobalScope('sorted', function (Builder $builder) {
-            $builder->latest('sort_order');
+            $builder->oldest('sort_order');
         });
     }
 

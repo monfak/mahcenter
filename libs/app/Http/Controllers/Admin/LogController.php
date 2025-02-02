@@ -29,6 +29,10 @@ class LogController extends Controller
     {
         if($request->ajax()) {
             $logs = Activity::query();
+            if($request->input('userName')) {
+                $usersIds = User::query()->where('name', 'like', '%' . $request->input('userName') . '%')->pluck('id')->toArray();
+                $logs->whereIn('causer_id', $usersIds);
+            }
             return Datatables::of($logs)
                 ->setTotalRecords($logs->count())
                 ->editColumn('log_name', function ($log) {

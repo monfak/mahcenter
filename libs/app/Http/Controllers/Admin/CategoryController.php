@@ -18,6 +18,8 @@ use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * CategoryController constructor.
      */
@@ -115,6 +117,8 @@ class CategoryController extends Controller
         $category->filterGroups()->sync($request->input('filter_id'));
         $category->attributeGroups()->sync($request->input('attribute_id'));
         $category->manufacturers()->sync($request->input('manufacturer_id'));
+        
+        $log = $this->activityLogService->init('دسته بندی', 'created')->prepare($category)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -166,7 +170,7 @@ class CategoryController extends Controller
     public function update(UpdateCategory $request, $id)
     {
         $category = Category::findOrFail($id);
-        
+        $log = $this->activityLogService->init('دسته بندی', 'updated')->prepare($category, 'old');
         $categoryData = $request->only(['name', 'title', 'label', 'slug', 'content', 'meta_description', 'parent_id', 'sort_order', 'discount', 'status', 'twitter_title', 'twitter_description', 'canonical', 'size_type']);
         $categoryData['user_id'] = auth()->user()->id;
         $categoryData['is_nofollow'] = $request->input('is_nofollow', false);
@@ -211,6 +215,8 @@ class CategoryController extends Controller
         $category->attributeGroups()->sync($request->input('attribute_id'));
         $category->manufacturers()->sync($request->input('manufacturer_id'));
 
+        $log->prepare($category)->finalize()->save();
+        
         success();
         
         return redirect()->route('admin.categories.index');
@@ -227,7 +233,7 @@ class CategoryController extends Controller
     {
         $data = $request->all();
         $category = Category::findOrFail($id);
-
+        $log = $this->activityLogService->init('دسته بندی', 'deleted')->prepare($category, 'old')->finalize()->save();
         $category->delete();
 
         success();

@@ -294,6 +294,32 @@
         </aside>
       </div>
     </div>
+    @if($crossProducts->isNotEmpty())
+    <section class="container logo-section pt-2 pb-2">
+      <div class="row">
+        <div class="col-12 p-0 text-center">
+          <h4 class="title-section">محصولات مکمل</h4>
+        </div>
+      </div>
+      <div class="row mt-2 mb-3 brand-section">
+        <div class="col-12 ps-0 pe-0 pt-3 pb-3">
+          <div class="owl-carousel owl-theme owl-logo">
+            @foreach($crossProducts as $product)
+            <div class="item">
+              <form action="{{ route('cart.add-normal', $product->id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="add-to-cart-btn" title="{{ $product->name }}">
+                    <img loading="lazy" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}" />
+                </button>
+              </form>
+            </div>
+            @endforeach
+          </div>
+        </div>
+      </div>
+    </section>
+    @endif
     @else
     <div class="container-fluid my-5">
         <div class="row">

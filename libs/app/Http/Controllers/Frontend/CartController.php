@@ -27,9 +27,12 @@ class CartController extends Controller
         $products = null;
         $totalSum = 0;
         $cartItems = [];
+        $crossProducts = collect();
     
         if ($cart) {
-            $cartItems = $cart->items()->with('product')->get();
+            $cartItems = $cart->items()->with(['product' => function($query) {
+                $query->with('crossProducts')->where('stock', '>', 0)->where('price', '>', 0);
+            }, 'warranty'])->get();
             foreach ($cartItems as $cartItem) {
                 $product = $cartItem->product;
                 $price = (int) ($product->special ?? $product->price);
@@ -51,11 +54,54 @@ class CartController extends Controller
                     'warranty'      => $cartItem->warranty?->name ?? null,
                     'totalPrice'    => $totalPrice,
                 ];
+                
+                $crossProducts = $crossProducts->merge($product->crossProducts);
     
                 $totalSum += $totalPrice;
             }
+            $crossProducts = $crossProducts->unique('id')->take(10)->values();
         }
-        return view('frontend.cart.index', compact('products', 'totalSum', 'cart'));
+        return view('frontend.cart.index', compact('products', 'totalSum', 'cart', 'crossProducts'));
+    }
+    
+    public function addNormal(Request $request, $id)
+    {
+        $id = (int) $id;
+
+        if (!$product = Product::whereId($id)->whereStatus(true)->first()) {
+            error("محصول انتخاب شده وجود ندارد.");
+            return back();
+        }
+
+        $quantity = (int) $request->quantity;
+        $warrantyId = (int) $request->input('warranty_id', null);
+        if($warrantyId == 0) {
+            $warrantyId = null;
+        }
+
+        if ($quantity < 1) {
+            error("حداقل تعداد انتخاب شده باید یک عدد باشد.");
+
+            return back();
+        }
+
+        if ($product->stock == 0) {
+            error("موجودی این محصول در انبار به اتمام رسیده و امکان سفارش آن وجود ندارد.");
+
+            return back();
+        }
+        if ($product->stock && $product->stock - $quantity >= 0) {
+            $this->cartService->addToCart($product->id, $quantity, $warrantyId);
+        } else {
+            error("موجودی محصول کافی نیست.");
+            return back();
+        }
+
+        $itemsInBasket = $this->cartService->getCartDetails();
+
+        success("محصول با موفقیت به سبد خرید شما اضافه گردید.");
+        
+        return back();
     }
 
     public function add(Request $request, $id)

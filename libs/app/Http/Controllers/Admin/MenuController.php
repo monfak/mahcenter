@@ -7,16 +7,20 @@ use App\Models\Image;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * MenuController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:menus-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -50,7 +54,8 @@ class MenuController extends Controller
     {
         $menuData = $request->only(['name', 'position']);
         $menuData['is_active'] = $request->input('is_active', false);
-        $page = Menu::create($menuData);
+        $menu = Menu::create($menuData);
+        $log = $this->activityLogService->init('منو', 'created')->prepare($menu)->finalize()->save();
         success('منو مورد نظر شما با موفقیت ایجاد گردید.');
         return redirect()->route('admin.menus.index');
     }
@@ -86,9 +91,11 @@ class MenuController extends Controller
      */
     public function update(MenuRequest $request, Menu $menu)
     {
+        $log = $this->activityLogService->init('منو', 'updated')->prepare($menu, 'old');
         $menuData = $request->only(['name', 'position']);
         $menuData['is_active'] = $request->input('is_active', false);
         $menu->update($menuData);
+        $log->prepare($menu)->finalize()->save();
         success('منو مورد نظر شما با موفقیت آپدیت گردید.');
         return redirect()->route('admin.menus.index');
     }
@@ -102,6 +109,7 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
+        $log = $this->activityLogService->init('منو', 'deleted')->prepare($menu, 'old')->finalize()->save();
         $menu->delete();
         success('منو مورد نظر شما با موفقیت حذف گردید.');
         return redirect()->route('admin.menus.index');

@@ -105,11 +105,18 @@ class CompareController extends Controller
             $product_id = Product::find(session('compare'))->pluck('id');
             if(!$product_id->isEmpty())
             {
-                $category_id = Product::query()->whereIn('id',session('compare'))->first()->categories()->pluck('id')->toArray();
+                $category_id = Product::query()
+                    ->whereIn('id', session('compare'))
+                    ->first()
+                    ->categories()
+                    ->whereHas('parent', function ($query) {
+                        $query->whereDoesntHave('parent');
+                    })
+                    ->value('id');
                 $product_all = Product::where('status', 1)->whereNotIn('id', $product_id)
-                ->whereHas('categories',function ($q) use ($category_id){
-                   $q->whereIn('id', $category_id);
-                })->get();
+                    ->whereHas('categories',function ($q) use ($category_id){
+                       $q->where('id', $category_id);
+                    })->get();
             } else {
                  $product_all = Product::where('status', 1)->latest()->get();
             }

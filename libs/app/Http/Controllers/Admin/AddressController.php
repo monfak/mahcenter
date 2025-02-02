@@ -10,6 +10,7 @@ use App\Models\Address;
 use App\Models\City;
 use App\Models\Province;
 use App\Http\Requests\AddressRequest;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\Hash;
 
 class AddressController extends Controller
@@ -17,9 +18,10 @@ class AddressController extends Controller
     /**
      * AddressController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:users-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -68,6 +70,7 @@ class AddressController extends Controller
         if($address->is_default) {
             Address::where('user_id', $user->id)->where('id', '<>', $address->id)->update(['is_default' => false]);
         }
+        $log = $this->activityLogService->init('آدرس', 'created')->prepare($address)->finalize()->save();
         success('آدرس جدید ایجاد گردید.');
         return redirect()->route('admin.users.addresses.index', $user->id);
     }
@@ -106,6 +109,7 @@ class AddressController extends Controller
     public function update(AddressRequest $request, Address $address)
     {
         abort_if($address->deleted_at, 404);
+        $log = $this->activityLogService->init('آدرس', 'updated')->prepare($address, 'old');
         $addressData = $request->only(['name', 'city_id', 'address']);
         $addressData['phone'] = to_latin_numbers($request->input('phone'));
         $addressData['post_code'] = to_latin_numbers($request->input('post_code'));
@@ -130,6 +134,7 @@ class AddressController extends Controller
         if($address->is_default) {
             Address::where('user_id', $address->user_id)->where('id', '<>', $address->id)->update(['is_default' => false]);
         }
+        $log->prepare($address)->finalize()->save();
         success('آدرس کاربر با موفقیت آپدیت شد.');
         return redirect()->route('admin.users.addresses.index', $address->user_id);
     }
@@ -144,6 +149,7 @@ class AddressController extends Controller
     {
         abort_if($address->deleted_at, 404);
         $userId = $address->user_id;
+        $log = $this->activityLogService->init('آدرس', 'deleted')->prepare($address, 'old')->finalize()->save();
         if($address->orders()->exists()) {
             $address->update(['deleted_at' => now()]);
         } else {

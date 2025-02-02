@@ -7,18 +7,22 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryMethod;
 use App\Http\Requests\DeliveryMethodRequest;
+use App\Services\ActivityLogService;
 use DB;
 use Yajra\DataTables\DataTables;
 
 
 class DeliveryMethodController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * DeliveryMethodController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:delivery-methods-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -64,9 +68,11 @@ class DeliveryMethodController extends Controller
     public function store(DeliveryMethodRequest $request)
     {
         $deliveryMethodData = $request->validated();
+        $deliveryMethodData['has_carrige_forward'] = $request->input('has_carrige_forward', false);
+        $deliveryMethodData['is_cover_all'] = $request->input('is_cover_all', false);
         $deliveryMethodData['is_active'] = $request->input('is_active', false);
-        $deliveryMethodData['price'] = $request->input('price') == 0 ? null : $request->input('price');
         $deliveryMethod = DeliveryMethod::create($deliveryMethodData);
+        $log = $this->activityLogService->init('روش ارسال', 'created')->prepare($deliveryMethod)->finalize()->save();
         success("روش ارسال $deliveryMethod->name ایجاد شد.");
         return redirect()->route('admin.delivery-methods.index');
     }
@@ -99,10 +105,13 @@ class DeliveryMethodController extends Controller
      */
     public function update(DeliveryMethodRequest $request, DeliveryMethod $deliveryMethod)
     {
+        $log = $this->activityLogService->init('روش ارسال', 'updated')->prepare($deliveryMethod, 'old');
         $deliveryMethodData = $request->validated();
+        $deliveryMethodData['has_carrige_forward'] = $request->input('has_carrige_forward', false);
+        $deliveryMethodData['is_cover_all'] = $request->input('is_cover_all', false);
         $deliveryMethodData['is_active'] = $request->input('is_active', false);
-        $deliveryMethodData['price'] = $request->input('price') == 0 ? null : $request->input('price');
         $deliveryMethod->update($deliveryMethodData);
+        $log->prepare($deliveryMethod)->finalize()->save();
         success("روش ارسال $deliveryMethod->name آپدیت شد.");
         return redirect()->route('admin.delivery-methods.index');
     }
@@ -118,6 +127,7 @@ class DeliveryMethodController extends Controller
     {
         $data = $request->all();
         $deliveryMethod = DeliveryMethod::findOrFail($id);
+        $log = $this->activityLogService->init('روش ارسال', 'deleted')->prepare($deliveryMethod, 'old')->finalize()->save();
         $deliveryMethod->delete();
         success('روش ارسال با موفقیت حذف گردید.');
         return redirect()->route('admin.delivery-methods.index');

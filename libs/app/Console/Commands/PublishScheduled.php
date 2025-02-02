@@ -38,6 +38,6 @@ class PublishScheduled extends Command
      */
     public function handle()
     {
-        Article::whereDate('published_at', '<=', now())->scheduled()->update(['status' => Article::STATUS_PUBLISHED]);
+        Article::whereDate('published_at', '<=', now())->scheduled()->updateQuietly(['status' => Article::STATUS_PUBLISHED]);
     }
 }

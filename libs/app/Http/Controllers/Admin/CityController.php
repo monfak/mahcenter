@@ -6,17 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Province;
 use App\Http\Requests\CityRequest;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class CityController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ProductController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:cities-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     public function index()
@@ -49,17 +53,16 @@ class CityController extends Controller
             ->make(true);
     }
 
-
     public function create(Request $request)
     {
         $provinces = Province::query()->pluck('name', 'id');
         return view('admin.cities.create', compact('provinces'));
     }
 
-
     public function store(CityRequest $request)
     {
         $city = City::query()->create($request->validated());
+        $log = $this->activityLogService->init('شهر', 'created')->prepare($city)->finalize()->save();
         success('شهر ' . $city->name . ' با موفقیت ایجاد شد.');
         return redirect()->route('admin.cities.index');
     }
@@ -90,7 +93,9 @@ class CityController extends Controller
      */
     public function update(CityRequest $request, City $city)
     {
+        $log = $this->activityLogService->init('شهر', 'updated')->prepare($city, 'old');
         $city->update($request->validated());
+        $log->prepare($city)->finalize()->save();
         success('شهر ' . $city->name . ' با موفقیت آپدیت شد.');
         return redirect()->route('admin.cities.index');
     }
@@ -106,6 +111,7 @@ class CityController extends Controller
     {
         $data = $request->all();
         $city = City::findOrFail($id);
+        $log = $this->activityLogService->init('شهر', 'deleted')->prepare($city, 'old')->finalize()->save();
         $city->delete();
         success();
         return redirect()->route('admin.cities.index');

@@ -83,26 +83,18 @@ class ProductController extends Controller
         $productId = $product->id;
 
         if (isset($visitedCategories[$categoryId])) {
-            // Check if the product exists in the category
             $productIndex = array_search($productId, $visitedCategories[$categoryId]['products']);
             if ($productIndex !== false) {
-                // Bring the product to the top if it exists
                 unset($visitedCategories[$categoryId]['products'][$productIndex]);
             }
-            // Add the product to the top of the list
             array_unshift($visitedCategories[$categoryId]['products'], $productId);
-            // Ensure only the latest 4 products per category are stored
             if (count($visitedCategories[$categoryId]['products']) > 4) {
                 $visitedCategories[$categoryId]['products'] = array_slice($visitedCategories[$categoryId]['products'], 0, 4);
             }
-            // Preserve the current category's products list
             $categoryProducts = $visitedCategories[$categoryId]['products'];
-            // Unset the category to update its order
             unset($visitedCategories[$categoryId]);
-            // Reassign the category with updated products list
             $visitedCategories = [$categoryId => ['products' => $categoryProducts]] + $visitedCategories;
         } else {
-            // Add new category with the product and 3 random products
             $visitedCategories[$categoryId] = [
                 'products' => [$productId]
             ];
@@ -121,7 +113,6 @@ class ProductController extends Controller
 
             $visitedCategories[$categoryId]['products'] = array_merge($visitedCategories[$categoryId]['products'], $additionalProducts);
 
-            // Add the new category to the start of the list
             $visitedCategories = [$categoryId => $visitedCategories[$categoryId]] + $visitedCategories;
             
             if (count($visitedCategories[$categoryId]['products']) < 4) {
@@ -129,7 +120,7 @@ class ProductController extends Controller
                 $moreProducts = Product::whereHas('categories', function ($query) use ($categoryId) {
                         $query->where('categories.id', $categoryId);
                     })
-                    ->whereNotIn('id', $visitedCategories[$categoryId]['products']) // جلوگیری از تکرار محصولات
+                    ->whereNotIn('id', $visitedCategories[$categoryId]['products'])
                     ->published()
                     ->where('price', '>', 0)
                     ->where('stock', '>', 0)
@@ -148,17 +139,6 @@ class ProductController extends Controller
             ->withCookie(cookie()->forever($cookieName, $visitedCategoriesJson));
     }
 
-
-
-//     public function paginate($items, $perPage = 100, $page = null, $options = [])
-// {
-//     $page = $page ?: request('page', 1); // استفاده از request برای دریافت شماره صفحه
-//     $items = $items instanceof Collection ? $items : Collection::make($items);
-//     return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-// }
-
-
-
     public function paginate($items, $perPage= 100, $page = null, $pageName = "page", $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -173,7 +153,6 @@ class ProductController extends Controller
         $product_id = $request->input('product_id');
         $page = $request->input('page', 1);
     
-        // اگر فقط شناسه محصول ارسال شده باشد
         if ($product_id) {
             $product = Product::find($product_id);
             if (!$product) {
@@ -203,7 +182,6 @@ class ProductController extends Controller
             return response()->json($productArray);
         }
     
-        // در غیر اینصورت، لیست محصولات به صورت پیجینیت شده با قالب نوع اول برگشت داده می‌شود.
         $products = Product::where('status',1)->latest()->get();
         $productArray = [];
     

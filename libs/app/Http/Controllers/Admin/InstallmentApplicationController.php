@@ -7,17 +7,21 @@ use App\Models\InstallmentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class InstallmentApplicationController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * InstallmentApplicationController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:installments-applications');
+        $this->activityLogService = $activityLogService;
     }
 
     /**

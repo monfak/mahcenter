@@ -61,7 +61,9 @@ class CalculateSales extends Command
                         ]);
                         $product->timestamps = true;
                         
-                        $order->update(['is_sale_calculated' => true]);
+                        $order->timestamps = false;
+                        $order->updateQuietly(['is_sale_calculated' => true]);
+                        $order->timestamps = true;
                         
                         DB::commit();
                     } catch (\Exception $e) {

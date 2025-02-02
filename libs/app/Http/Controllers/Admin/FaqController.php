@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Models\Faq;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class FaqController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * FaqController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:faqs-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -65,7 +69,8 @@ class FaqController extends Controller
     {
         $faqData = $request->only(['heading', 'sort_order', 'content', 'is_active']);
         $faqData['is_active'] = $request->input('is_active', false);
-        Faq::create($faqData);
+        $faq = Faq::create($faqData);
+        $log = $this->activityLogService->init('سوال متداول', 'created')->prepare($faq)->finalize()->save();
         success('سوال با موفقیت به سوالات متداول اضافه شد.');
         return redirect()->route('admin.faqs.index');
     }
@@ -101,9 +106,11 @@ class FaqController extends Controller
      */
     public function update(FaqRequest $request, Faq $faq)
     {
+        $log = $this->activityLogService->init('سوال متداول', 'updated')->prepare($faq, 'old');
         $faqData = $request->only(['heading', 'sort_order', 'content', 'is_active']);
         $faqData['is_active'] = $request->input('is_active', false);
         $faq->update($faqData);
+        $log->prepare($faq)->finalize()->save();
         success('سوال با موفقیت آپدیت شد.');
         return redirect()->route('admin.faqs.index');
     }
@@ -116,6 +123,8 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
+        $faq = Faq::query()->find($id);
+        $log = $this->activityLogService->init('سوال متداول', 'deleted')->prepare($faq, 'old')->finalize()->save();
         Faq::destroy($id);
         success('سوال مورد نظر با موفقیت حذف شد.');
         return redirect()->route('admin.faqs.index');

@@ -7,6 +7,7 @@ use App\Models\InstallmentPercent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Models\Faq;
 use App\Models\Setting;
 use App\Http\Requests\InstallmentMonthRequest;
 use App\Http\Requests\InstallmentPercentRequest;
@@ -291,7 +292,10 @@ class SettingController extends Controller
     public function b2bIndex()
     {
         $settings = Setting::pluck('value', 'key')->toArray();
-        return view('admin.settings.b2b' , compact('settings'));
+        $faqs = Faq::query()->pluck('heading', 'id');
+        $selectedBeforeFaqs = Faq::query()->where('is_before_b2b')->pluck('id')->toArray();
+        $selectedAfterFaqs = Faq::query()->where('is_after_b2b')->pluck('id')->toArray();
+        return view('admin.settings.b2b' , compact('settings', 'faqs', 'selectedBeforeFaqs', 'selectedAfterFaqs'));
     }
 
     /**
@@ -301,6 +305,71 @@ class SettingController extends Controller
      */
     public function b2bUpdate(Request $request)
     {
+        Setting::where('key', 'b2b_intro_content')->update(['value' => $request->input('b2b_intro_content')]);
+        Setting::where('key', 'b2b_intro_box_content')->update(['value' => $request->input('b2b_intro_box_content')]);
+        Setting::where('key', 'b2b_intro_contact_text')->update(['value' => $request->input('b2b_intro_contact_text')]);
+        Setting::where('key', 'b2b_intro_contact_phone')->update(['value' => $request->input('b2b_intro_contact_phone')]);
+        Setting::where('key', 'b2b_why_heading')->update(['value' => $request->input('b2b_why_heading')]);
+        Setting::where('key', 'b2b_why_content')->update(['value' => $request->input('b2b_why_content')]);
+        Setting::where('key', 'b2b_steps_1_alt')->update(['value' => $request->input('b2b_steps_1_alt')]);
+        Setting::where('key', 'b2b_steps_1_content')->update(['value' => $request->input('b2b_steps_1_content')]);
+        Setting::where('key', 'b2b_steps_2_alt')->update(['value' => $request->input('b2b_steps_2_alt')]);
+        Setting::where('key', 'b2b_steps_2_content')->update(['value' => $request->input('b2b_steps_2_content')]);
+        Setting::where('key', 'b2b_steps_3_alt')->update(['value' => $request->input('b2b_steps_3_alt')]);
+        Setting::where('key', 'b2b_steps_3_content')->update(['value' => $request->input('b2b_steps_3_content')]);
+        Setting::where('key', 'b2b_trust_heading')->update(['value' => $request->input('b2b_trust_heading')]);
+        Setting::where('key', 'b2b_trust_content')->update(['value' => $request->input('b2b_trust_content')]);
+        Setting::where('key', 'b2b_banners_1_heading')->update(['value' => $request->input('b2b_banners_1_heading')]);
+        Setting::where('key', 'b2b_banners_1_content')->update(['value' => $request->input('b2b_banners_1_content')]);
+        Setting::where('key', 'b2b_banners_1_text')->update(['value' => $request->input('b2b_banners_1_text')]);
+        Setting::where('key', 'b2b_banners_1_url')->update(['value' => $request->input('b2b_banners_1_url')]);
+        Setting::where('key', 'b2b_banners_2_heading')->update(['value' => $request->input('b2b_banners_2_heading')]);
+        Setting::where('key', 'b2b_banners_2_content')->update(['value' => $request->input('b2b_banners_2_content')]);
+        Setting::where('key', 'b2b_banners_2_text')->update(['value' => $request->input('b2b_banners_2_text')]);
+        Setting::where('key', 'b2b_banners_2_url')->update(['value' => $request->input('b2b_banners_2_url')]);
+        Setting::where('key', 'b2b_banners_3_heading')->update(['value' => $request->input('b2b_banners_3_heading')]);
+        Setting::where('key', 'b2b_banners_3_content')->update(['value' => $request->input('b2b_banners_3_content')]);
+        Setting::where('key', 'b2b_banners_3_text')->update(['value' => $request->input('b2b_banners_3_text')]);
+        Setting::where('key', 'b2b_banners_3_url')->update(['value' => $request->input('b2b_banners_3_url')]);
+        Setting::where('key', 'b2b_banners_4_heading')->update(['value' => $request->input('b2b_banners_4_heading')]);
+        Setting::where('key', 'b2b_banners_4_content')->update(['value' => $request->input('b2b_banners_4_content')]);
+        Setting::where('key', 'b2b_banners_4_text')->update(['value' => $request->input('b2b_banners_4_text')]);
+        Setting::where('key', 'b2b_banners_4_url')->update(['value' => $request->input('b2b_banners_4_url')]);
+        if ($request->hasFile('b2b_intro_image')) {
+            $name = pathinfo($request->b2b_intro_image->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($request->b2b_intro_image->storeAs('public/images/' . date('Y/m'), $name . '.' . $request->b2b_intro_image->getClientOriginalExtension())) {
+                $image = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->b2b_intro_image->getClientOriginalExtension();
+                Setting::where('key', 'b2b_intro_image')->update(['value' => $image]);
+            }
+        }
+        if ($request->hasFile('b2b_banners_1_image')) {
+            $name = pathinfo($request->b2b_banners_1_image->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($request->b2b_banners_1_image->storeAs('public/images/' . date('Y/m'), $name . '.' . $request->b2b_banners_1_image->getClientOriginalExtension())) {
+                $image = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->b2b_banners_1_image->getClientOriginalExtension();
+                Setting::where('key', 'b2b_banners_1_image')->update(['value' => $image]);
+            }
+        }
+        if ($request->hasFile('b2b_banners_2_image')) {
+            $name = pathinfo($request->b2b_banners_2_image->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($request->b2b_banners_2_image->storeAs('public/images/' . date('Y/m'), $name . '.' . $request->b2b_banners_2_image->getClientOriginalExtension())) {
+                $image = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->b2b_banners_2_image->getClientOriginalExtension();
+                Setting::where('key', 'b2b_banners_2_image')->update(['value' => $image]);
+            }
+        }
+        if ($request->hasFile('b2b_banners_3_image')) {
+            $name = pathinfo($request->b2b_banners_3_image->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($request->b2b_banners_3_image->storeAs('public/images/' . date('Y/m'), $name . '.' . $request->b2b_banners_3_image->getClientOriginalExtension())) {
+                $image = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->b2b_banners_3_image->getClientOriginalExtension();
+                Setting::where('key', 'b2b_banners_3_image')->update(['value' => $image]);
+            }
+        }
+        if ($request->hasFile('b2b_banners_4_image')) {
+            $name = pathinfo($request->b2b_banners_4_image->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($request->b2b_banners_4_image->storeAs('public/images/' . date('Y/m'), $name . '.' . $request->b2b_banners_4_image->getClientOriginalExtension())) {
+                $image = 'storage/images/' . date('Y/m') . '/' . $name . '.' . $request->b2b_banners_4_image->getClientOriginalExtension();
+                Setting::where('key', 'b2b_banners_4_image')->update(['value' => $image]);
+            }
+        }
         success('تنظیمات آپدیت شدند.');
         return redirect()->route('admin.settings.b2b.index');
     }

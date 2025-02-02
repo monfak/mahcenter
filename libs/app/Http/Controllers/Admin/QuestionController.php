@@ -9,15 +9,19 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\ActivityLogService;
 
 class QuestionController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * QuestionController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:questions-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     /**
@@ -51,6 +55,7 @@ class QuestionController extends Controller
     {
         $questionData = $request->only(['user_id', 'product_id', 'ip', 'title', 'status']);
         $question = Question::create($questionData);
+        $log = $this->activityLogService->init('سوال', 'created')->prepare($question)->finalize()->save();
 	    success('نظر با موفقیت ثبت شد.');
 	    return redirect()->route('admin.questions.index');
 	}
@@ -86,12 +91,14 @@ class QuestionController extends Controller
     public function update(Request $request, $id)
     {
         $question = Question::findOrFail($id);
+        $log = $this->activityLogService->init('سوال', 'updated')->prepare($question, 'old');
         if($request->input('answer')) {
             $answer = Answer::create([
                 'content'       => $request->input('answer'),
                 'question_id'   => $question->id,
             ]);
         }
+        $log->prepare($question)->finalize()->save();
         success();
         return redirect()->route('admin.questions.index');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LoggableRelations;
 use App\Observers\CategoryObserver;
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -9,6 +10,8 @@ use DB;
 #[ObservedBy([CategoryObserver::class])]
 class Category extends Model
 {
+    use LoggableRelations;
+    
     protected $fillable = [
         'name',
         'label',
@@ -34,6 +37,91 @@ class Category extends Model
         'is_noindex',
         'show_in_menu',
         'size_type',
+    ];
+    
+    protected $logRelations = [
+        'filterGroups' => ['id', 'name'],
+    ];
+    
+    protected $logOnly = [
+        'name',
+        'label',
+        'slug',
+        'icon',
+        'image',
+        'content',
+        'meta_keywords',
+        'meta_description',
+        'parent_id',
+        'has_slider',
+        'sort_order',
+        'discount',
+        'status',
+        'show',
+        'title',
+        'og_image',
+        'twitter_title',
+        'twitter_description',
+        'twitter_image',
+        'canonical',
+        'is_nofollow',
+        'is_noindex',
+        'show_in_menu',
+        'size_type',
+    ];
+    
+    protected $translations = [
+        'id' => 'آی دی',
+        'name' => 'نام',
+        'label' => 'لیبل',
+        'slug' => 'اسلاگ',
+        'icon' => 'آیکن',
+        'image' => 'تصویر',
+        'content' => 'محتوا',
+        'meta_description' => 'متادسکریپشن',
+        'has_slider' => 'دارای اسلایدر',
+        'sort_order' => 'ترتیب',
+        'discount' => 'تخفیف',
+        'status' => 'وضعیت',
+        'show' => 'نمایش',
+        'title' => 'تایتل',
+        'og_image' => 'تصویر اپن گراف',
+        'twitter_title' => 'تایتل توئیتر',
+        'twitter_description' => 'دسکریپشن توئیتر',
+        'twitter_image' => 'تصویر توئیتر',
+        'canonical' => 'کنونیکال ',
+        'is_nofollow' => 'نوفالو است',
+        'is_noindex' => 'نوایندکس است',
+        'show_in_menu' => 'نمایش در منو',
+        'size_type' => 'نوع سایز',
+    ];
+    
+    protected $type = [
+        'name' => 'string',
+        'label' => 'string',
+        'slug' => 'string',
+        'icon' => 'image',
+        'image' => 'image',
+        'content' => 'string',
+        'meta_keywords' => 'string',
+        'meta_description' => 'string',
+        'parent_id' => 'relation',
+        'has_slider' => 'boolean',
+        'sort_order' => 'integer',
+        'discount' => 'integer',
+        'status' => 'boolean',
+        'show' => 'boolean',
+        'title' => 'string',
+        'og_image' => 'image',
+        'twitter_title' => 'string',
+        'twitter_description' => 'string',
+        'twitter_image' => 'image',
+        'canonical' => 'string',
+        'is_nofollow' => 'boolean',
+        'is_noindex' => 'boolean',
+        'show_in_menu' => 'boolean',
+        'size_type' => 'boolean',
+        'filterGroups' => 'relation',
     ];
 
     /**

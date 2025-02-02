@@ -14,10 +14,15 @@ class DeliveryMethodRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|max:191',
-            'price'     => 'nullable|numeric',
-            'content'   => 'nullable|string',
-            'is_active' => 'nullable|in:0,1',
+            'name'                  => 'required|max:191',
+            'price'                 => 'nullable|numeric',
+            'in_city_price'         => 'nullable|numeric',
+            'small_floor_price'     => 'nullable|numeric',
+            'big_floor_price'       => 'nullable|numeric',
+            'content'               => 'nullable|string',
+            'has_carrige_forward'   => 'nullable|in:0,1',
+            'is_cover_all'          => 'nullable|in:0,1',
+            'is_active'             => 'nullable|in:0,1',
         ];
     }
 

@@ -160,9 +160,6 @@
             });
         });
 
-    </script>
-    <script>
-
         if (matchMedia('only screen and (min-width:768px)').matches) {
             $('#collapseTwo').addClass('show');
         }
@@ -190,24 +187,21 @@
         });
         <!---->
 
-
-
-
         ///اسکریپت مربوط به صفحه بندی///
         $('#pagination-categori').twbsPagination({
             totalPages: 4,
-// the current page that show on start
+            // the current page that show on start
             startPage: 1,
 
-// maximum visible pages
+            // maximum visible pages
             visiblePages: 2,
 
             initiateStartPageClick: true,
 
-// template for pagination links
+            // template for pagination links
             href: false,
 
-// variable name in href template for page number
+            // variable name in href template for page number
             {{--hrefVariable: '{{number}}',--}}
 
             // Text labels
@@ -216,16 +210,16 @@
             last:'آخری',
             first:'اولی',
 
-// carousel-style pagination
+            // carousel-style pagination
             loop: false,
 
-// callback function
+            // callback function
             onPageClick: function (event, page) {
                 $('.page-active').removeClass('page-active');
                 $('#page'+page).addClass('page-active');
             },
 
-// pagination Classes
+            // pagination Classes
             paginationClass: 'pagination',
             nextClass: 'بعدی',
             prevClass: 'قبلی',
@@ -282,16 +276,35 @@
         $(".close-flter").on("click", function() {
             $("#collapseTwo").collapse('hide');
         });
-function sticky_sidebar() {
+        function sticky_sidebar() {
             $('.sticky_column')
                 .theiaStickySidebar({
-                    additionalMarginTop: 100
+                    additionalMarginTop: 200
                 });
         }
 
         jQuery(document).ready(function () {
             sticky_sidebar()
         });
+        $(document).ready(function () {
+            function syncRadioButtons(element) {
+                let sortValue = $(element).data("sort");
+        
+                if (sortValue) {
+                    $(`.button_radio.filter[data-sort="${sortValue}"]`).prop("checked", true);
+                    $(`input[name='radio-talar'][data-sort="${sortValue}"]`).prop("checked", true);
+                }
+            }
+        
+            $("input[name='radio-talar']").on("change", function () {
+                syncRadioButtons(this);
+            });
+        
+            $("input[name='filter_sort']").on("change", function () {
+                syncRadioButtons(this);
+            });
+        });
+
     </script>
 @endsection
 @section('styles')
@@ -333,52 +346,37 @@ function sticky_sidebar() {
                                                                         <p class="sort-caption">مرتب سازی</p>
                                                                         <div class="radio radio-primary">
                                                                             <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty"> پر بازدید ترین ها</span>
-                                                                                <input id="sort-1" name="radio-talar" value=" پر بازدید ترین ها" type="radio">
+                                                                                <span class="radiotextsty">پر بازدیدترین ها</span>
+                                                                                <input id="sort-1" name="radio-talar" value="most_viewed" type="radio" data-sort="most_viewed">
                                                                                 <span class="checkmark"></span>
                                                                             </label>
                                                                         </div>
                                                                         <div class="radio radio-primary">
                                                                             <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty">  جدید ترین ها</span>
-                                                                                <input id="sort-2" name="radio-talar" value=" جدید ترین ها" type="radio">
+                                                                                <span class="radiotextsty">جدیدترین ها</span>
+                                                                                <input id="sort-2" name="radio-talar" value="latest" type="radio" data-sort="latest">
                                                                                 <span class="checkmark"></span>
                                                                             </label>
                                                                         </div>
                                                                         <div class="radio radio-primary">
                                                                             <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty">محبوب ترین ها</span>
-                                                                                <input id="sort-3" name="radio-talar" value=" محبوب ترین ها" type="radio">
+                                                                                <span class="radiotextsty">قیمت نزولی</span>
+                                                                                <input id="sort-5" name="radio-talar" value="price_desc" type="radio" data-sort="price_desc">
                                                                                 <span class="checkmark"></span>
                                                                             </label>
                                                                         </div>
                                                                         <div class="radio radio-primary">
                                                                             <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty">  پرفروش ترین ها</span>
-                                                                                <input id="sort-4" name="radio-talar" value=" پرفروش ترین ها" type="radio">
+                                                                                <span class="radiotextsty">قیمت صعودی</span>
+                                                                                <input id="sort-6" name="radio-talar" value="price_asc" type="radio" data-sort="price_asc">
                                                                                 <span class="checkmark"></span>
                                                                             </label>
                                                                         </div>
-                                                                        <div class="radio radio-primary">
-                                                                            <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty"> قیمت نزولی</span>
-                                                                                <input id="sort-5" name="radio-talar" value=" قیمت نزولی" type="radio">
-                                                                                <span class="checkmark"></span>
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="radio radio-primary">
-                                                                            <label class="checkbox-icon customradio">
-                                                                                <span class="radiotextsty"> قیمت صعودی</span>
-                                                                                <input id="sort-6" name="radio-talar" value=" قیمت صعودی" type="radio">
-                                                                                <span class="checkmark"></span>
-                                                                            </label>
-                                                                        </div>
-
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <div class="btn-group btn-group-justified" role="group" aria-label="group button">
                                                                             <div class="btn-group btn-delete " role="group">
-                                                                                <button type="button" id="delImage" class="btn btn-default btn-hover-red" data-bs-dismiss="modal" role="button">اعمال</button>
+                                                                                <button type="button" id="delImage" class="btn btn-default btn-hover-red filter-btn" data-bs-dismiss="modal" role="button">اعمال</button>
                                                                             </div>
                                                                             <div class="btn-group" role="group">
                                                                                 <button type="button" class="btn btn-default" data-bs-dismiss="modal" role="button">انصراف</button>
@@ -521,7 +519,6 @@ function sticky_sidebar() {
                                                                     </button>
                                                                 </p>
                                                             </div>
-
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -570,22 +567,21 @@ function sticky_sidebar() {
                                                     </span>مرتب سازی
                                                 </label>
                                                 <label class="sort_label">
-                                                    <input class="button_radio filter" value="most_viewed" name="filter_sort" type="radio">
-                                                    <span>پربازديد ترين</span>
+                                                    <input class="button_radio filter" value="most_viewed" name="filter_sort" type="radio" data-sort="most_viewed">
+                                                    <span>پربازديدترين</span>
                                                 </label>
                                                 <label class="sort_label">
-                                                    <input class="button_radio filter" value="latest" name="filter_sort" type="radio">
+                                                    <input class="button_radio filter" value="latest" name="filter_sort" type="radio" data-sort="latest">
                                                     <span>جديدترين‌ها</span>
                                                 </label>
                                                 <label class="sort_label">
-                                                    <input class="button_radio filter" value="price_desc" name="filter_sort" type="radio">
+                                                    <input class="button_radio filter" value="price_desc" name="filter_sort" type="radio" data-sort="price_desc">
                                                     <span>قيمت نزولی</span>
                                                 </label>
                                                 <label class="sort_label">
-                                                    <input class="button_radio filter" value="price_asc" name="filter_sort" type="radio">
+                                                    <input class="button_radio filter" value="price_asc" name="filter_sort" type="radio" data-sort="price_asc">
                                                     <span>قيمت صعودی</span>
                                                 </label>
-
                                             </div>
                                         </div>
 

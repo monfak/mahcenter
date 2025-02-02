@@ -68,6 +68,7 @@ class Product extends Model
         'is_festival',
         'is_available',
         'dev_title',
+        'manual_updated_at',
     ];
 
     protected $logRelations = [
@@ -246,6 +247,7 @@ class Product extends Model
             'required_national_id' => 'boolean',
             'is_festival' => 'boolean',
             'discount' => 'integer',
+            'manual_updated_at' => 'datetime',
         ];
     }
 

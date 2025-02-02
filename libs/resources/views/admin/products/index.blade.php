@@ -89,7 +89,7 @@
                     }
                 },
                 {data: 'created_at', name: 'created_at'},
-                {data: 'updated_at', name: 'updated_at'},
+                {data: 'manual_updated_at', name: 'manual_updated_at'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
                 {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}
@@ -146,7 +146,7 @@
                     }
                 },
                 {data: 'created_at', name: 'created_at'},
-                {data: 'updated_at', name: 'updated_at'},
+                {data: 'manual_updated_at', name: 'manual_updated_at'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
                 {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}
@@ -193,7 +193,7 @@
                 }
             },
             {data: 'created_at', name: 'created_at'},
-            {data: 'updated_at', name: 'updated_at'},
+            {data: 'manual_updated_at', name: 'manual_updated_at'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
             {data: 'dev_title', name: 'dev_title', visible: false, orderable: false, searchable: true}

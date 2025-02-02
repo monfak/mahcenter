@@ -9,15 +9,19 @@ use App\Models\Filter;
 use App\Models\FilterGroup;
 use App\Http\Requests\StoreFilter;
 use App\Http\Requests\UpdateFilter;
+use App\Services\ActivityLogService;
 
 class FilterController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * FilterController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:filters-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     /**
@@ -26,7 +30,7 @@ class FilterController extends Controller
      */
     public function index()
     {
-        $filterGroups = FilterGroup::latest('sort_order')->get();
+        $filterGroups = FilterGroup::oldest('sort_order')->get();
         return view()->first(['admin.filters.index', 'filter::index'], compact('filterGroups'));
     }
 
@@ -69,6 +73,8 @@ class FilterController extends Controller
 
             Filter::insert($filters);
         }
+        
+        $log = $this->activityLogService->init('فیلتر', 'created')->prepare($filterGroup)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -111,6 +117,7 @@ class FilterController extends Controller
     public function update(UpdateFilter $request, $id)
     {
         $filterGroup = FilterGroup::findOrFail($id);
+        $log = $this->activityLogService->init('فیلتر', 'updated')->prepare($filterGroup, 'old');
 
         $filterGroup->name       = $request->input('group_name');
         $filterGroup->label      = $request->input('group_label');
@@ -153,6 +160,8 @@ class FilterController extends Controller
 
             Filter::insert($filters);
         }
+        
+        $log->prepare($filterGroup)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -174,6 +183,7 @@ class FilterController extends Controller
     {
         $data = $request->all();
         $filterGroup = FilterGroup::findOrFail($id);
+        $log = $this->activityLogService->init('فیلتر', 'deleted')->prepare($filterGroup, 'old')->finalize()->save();
 
         if ( isset($data['delete'] ))
         {

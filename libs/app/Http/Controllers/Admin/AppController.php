@@ -62,6 +62,7 @@ class AppController extends Controller
         $latestProducts             = Product::query()->latest()->take(6)->get();
         $latestReviews              = Review::query()->with('user', 'parent')->latest()->take(6)->get();
         $latestTickets              = Ticket::query()->with('user')->latest()->take(6)->get();
+        $latestUsers                = User::query()->latest()->take(10)->get();
         $notCompletedProducts       = Product::query()
                                         ->whereNull('alt')
                                         ->orWhereNull('title')
@@ -100,6 +101,7 @@ class AppController extends Controller
             'latestProducts',
             'latestReviews',
             'latestTickets',
+            'latestUsers',
             'notCompletedProducts',
             'totalOrdersAmountLastWeek',
             'growthLastWeek',

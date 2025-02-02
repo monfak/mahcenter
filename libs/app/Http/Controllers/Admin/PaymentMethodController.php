@@ -7,17 +7,21 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
 use App\Http\Requests\PaymentMethodRequest;
+use App\Services\ActivityLogService;
 use DB;
 use Yajra\DataTables\DataTables;
 
 class PaymentMethodController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * PaymentMethodController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:payment-methods-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -66,6 +70,7 @@ class PaymentMethodController extends Controller
         $paymentMethodData['is_active'] = $request->input('is_active', false);
         $paymentMethodData['is_removable'] = $request->input('is_removable', true);
         $paymentMethod = PaymentMethod::create($paymentMethodData);
+        $log = $this->activityLogService->init('روش پرداخت', 'created')->prepare($paymentMethod)->finalize()->save();
         success("روش پرداخت $paymentMethod->name ایجاد شد.");
         return redirect()->route('admin.payment-methods.index');
     }
@@ -98,9 +103,11 @@ class PaymentMethodController extends Controller
      */
     public function update(PaymentMethodRequest $request, PaymentMethod $paymentMethod)
     {
+        $log = $this->activityLogService->init('روش پرداخت', 'updated')->prepare($paymentMethod, 'old');
         $paymentMethodData = $request->validated();
         $paymentMethodData['is_active'] = $request->input('is_active', false);
         $paymentMethod->update($paymentMethodData);
+        $log->prepare($paymentMethod)->finalize()->save();
         success("روش پرداخت $paymentMethod->name آپدیت شد.");
         return redirect()->route('admin.payment-methods.index');
     }
@@ -116,6 +123,7 @@ class PaymentMethodController extends Controller
     {
         $data = $request->all();
         $paymentMethod = PaymentMethod::findOrFail($id);
+        $log = $this->activityLogService->init('روش پرداخت', 'deleted')->prepare($paymentMethod, 'old')->finalize()->save();
         $paymentMethod->delete();
         success('روش پرداخت با موفقیت حذف گردید.');
         return redirect()->route('admin.payment-methods.index');

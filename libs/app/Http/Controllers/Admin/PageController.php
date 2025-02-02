@@ -10,15 +10,19 @@ use Illuminate\Support\Str;
 use App\Models\Page;
 use App\Http\Requests\StorePage;
 use App\Http\Requests\UpdatePage;
+use App\Services\ActivityLogService;
 
 class PageController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * PageController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:pages-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -74,6 +78,8 @@ class PageController extends Controller
         }
 
         $page = Page::create($page_data);
+        
+        $log = $this->activityLogService->init('صفحه', 'created')->prepare($page)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -112,6 +118,7 @@ class PageController extends Controller
     public function update(UpdatePage $request, $id)
     {
         $page = Page::findOrFail($id);
+        $log = $this->activityLogService->init('صفحه', 'updated')->prepare($page, 'old');
         $page_data = $request->only(['heading', 'title', 'slug', 'content', 'meta_description', 'status', 'twitter_title', 'twitter_description', 'canonical']);
         $page_data['is_nofollow'] = $request->input('is_nofollow', false);
         $page_data['is_noindex'] = $request->input('is_noindex', false);
@@ -136,6 +143,7 @@ class PageController extends Controller
         }
 
         $page->update($page_data);
+        $log->prepare($page)->finalize()->save();
 
         session()->flash('msg', [
             'status' => 'success',
@@ -156,7 +164,9 @@ class PageController extends Controller
     public function destroy(Request $request, $id)
     {
         $data = $request->all();
-        $article = Page::findOrFail($id);
+        $page = Page::findOrFail($id);
+        
+        $log = $this->activityLogService->init('صفحه', 'deleted')->prepare($page, 'old')->finalize()->save();
 
         if (auth()->user()->can('manage-store')) {
             $article->delete();

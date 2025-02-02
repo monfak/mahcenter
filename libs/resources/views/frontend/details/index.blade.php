@@ -298,6 +298,34 @@
                     </div>
                 </div>
                 @endauth
+                <h3>روش‌های ارسال</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover fs-sm border-top">
+                        <thead>
+                            <tr>
+                                <th class="align-middle"></th>
+                                <th class="align-middle">روش ارسال</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($deliveryMethods as $deliveryMethod)
+                            <tr>
+                                <td>
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input delivery_method_id" type="radio" id="delivery_method_id{{ $deliveryMethod->id }}" name="delivery_method_id"{{ $deliveryMethod->id == $cart->delivery_method_id ? ' checked' : '' }} value="{{ $deliveryMethod->id }}">
+                                        <label class="form-check-label" for="delivery_method_id{{ $deliveryMethod->id }}"></label>
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="text-dark fw-medium">{{ $deliveryMethod->name }}</span>
+                                    <br>
+                                    <span class="text-muted">{{ $deliveryMethod->content }}</span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <!-- Navigation (desktop)-->
                 <div class=" d-flex pt-4">
                     <div class="w-50 ps-3">
@@ -361,25 +389,7 @@
                             <span class="me-2">هزینه حمل و نقل:</span>
                             <span class="text-end">
                                 پس کرایه
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#cartModal" onclick="event.preventDefault();">
-                                    مشاهده تعرفه هزینه ارسال
-                                </a>
-                                <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down"> 
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title" id="cartModalLabel">تعرفه ها</h5>
-                                        <button type="button" class="btn-close btn-lg" data-bs-dismiss="modal" aria-label="Close"></button> 
-                                      </div>
-                                      <div class="modal-body">
-                                        {!! str_replace(['<h2>', '</h2>'], ['<p>', '</p>'], $shippingPricePage->content) !!}
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت به سبد خرید</button> 
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                
                             </span>
                         </li>
                         <li class="d-flex justify-content-between align-items-center">
@@ -399,6 +409,29 @@
                 <p>
                     کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی را تکمیل کنید.
                 </p>
+                <p>
+                    هزینه ارسال به صورت خودکار و با انتخاب آدرس و روش ارسال مشخص می‌شود. همچنین می‌توانید برای
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#cartModal" onclick="event.preventDefault();">
+                        مشاهده تعرفه هزینه ارسال
+                    </a>    
+                    کلیک کنید.
+                </p>
+                <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down"> 
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="cartModalLabel">تعرفه ها</h5>
+                        <button type="button" class="btn-close btn-lg" data-bs-dismiss="modal" aria-label="Close"></button> 
+                      </div>
+                      <div class="modal-body">
+                        {!! str_replace(['<h2>', '</h2>'], ['<p>', '</p>'], $shippingPricePage->content) !!}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت به سبد خرید</button> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
         </aside>

@@ -74,79 +74,9 @@
                         <img src="{{ asset($article->image) }}" alt="{{ $article->title }}" class="img-fluid rounded img-first">
                   </div>
                 @endif
-                {{--<div class="mt-4 text-center" >
-                    <div class="col-md-6 mx-auto col-12 p-0" id="sample-pro">
-                       <div class="card crd-pro">
-                          <div class="card-bdy">
-                               <a class="row align-items-center" href="">
-                               <div class="col-4 ps-0">
-                                   <div class="s-img-pro">
-                                        <img src="https://mahcenter.com/storage/images/products/2023/07/108-mahcenter-h130.jpg" alt="اجاق گاز صفحه ای یا مبله؟ کدام بهتر است؟"> 
-                                   </div>
-                               </div>
-                                <div class="col-8 pe-0">
-                                   <div class="title-small-blog">
-                                <div class="d-block pro-name">آون توستر رومانزو مدل 108
-                                </div> 
-                               <div class="d-flex flex-price">
-                                 <div class="">
-                              
-                                <span class="offer">
-                                  <span class="off">5 %</span>
-                                </span>
-                              </div>
-                                <div class="">
-                                <div>
-                                      <span class="old-cost me-2">10,000,000 <span class="unit">تومان</span>
-                                </span>
-                                </div>    
-                                <div>
-                                     <span class="cost-total">9,500,000</span>
-                                <span class="unit">تومان</span>
-                                </div>
-                              </div>
-                               </div>
-                            </div>
-                               </div>
-                           </a>
-                          </div>
-                       </div>  
-                    </div>
-                </div>--}}
                 <div class="mt-4">
                     {!! $article->content !!}
                 </div>
-                {{--<div class="row mt-4">
-                    <div class="col-12 p-0 ">
-                        <div class="card ">
-                          <div class="card-header">اشتراک گذاری</div>
-                          <div class="card-body">
-                            <ul class="ps-0 share text-end">
-                                <li>
-                                <a  href="#"  title="افزودن به علاقه‌مندی‌ها">
-                                  <i class="far fa-bookmark"></i>
-                                </a>
-                              </li>
-                              <li>
-                                <a  href="https://t.me/share/url?url" rel="nofollow" title="اشتراک‌گذاری با تلگرام">
-                                  <i class="fab fa-telegram"></i>
-                                </a>
-                              </li>
-                              <li>
-                                <a  href="whatsapp://send?text=" data-action="share/whatsapp/share" rel="nofollow" title="اشتراک‌گذاری با واتساپ">
-                                  <i class="fab fa-whatsapp"></i>
-                                </a>
-                              </li>
-                              <li>
-                                <a  href="https://twitter.com/home?status=" rel="nofollow" title="اشتراک‌گذاری با توئیتر">
-                                  <i class="fab fa-twitter"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                    </div>
-                </div>--}}
             </article>
         </div>
         @if(count($article->faqs))

@@ -48,7 +48,7 @@
                                                 <span class="fa fa-pencil"></span> ویرایش
                                             </a>
                                             @if($role->is_deletable)
-                                            <button type="submit" name="delete" class="btn btn-danger btn-xs">
+                                            <button type="submit" name="delete" class="btn btn-danger btn-xs" onclick="return confirm('آیا از حذف این نقش کاربری اطمینان دارید؟');">
                                                 <span class="fa fa-trash"></span> حذف
                                             </button>
                                             @endif

@@ -32,7 +32,9 @@ class RecountManufacturerProducts extends Command
             $query->where('stock', '>', 0)->where('price', '>', 0)->published();
         }])->get();
         foreach($manufacturers as $manufacturer) {
-            $manufacturer->update(['total_products' => $manufacturer->products_count]);
+            $manufacturer->timestamps = false;
+            $manufacturer->updateQuietly(['total_products' => $manufacturer->products_count]);
+            $manufacturer->timestamps = true;
         }
     }
 }

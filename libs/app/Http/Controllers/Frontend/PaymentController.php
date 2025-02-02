@@ -27,6 +27,7 @@ class PaymentController extends Controller
 {
     public function request(Request $request, Order $order, $gateway = 'mellat')
     {
+
         Log::info('Starting payment request for Order ID: ' . $order->id);
         //$user = auth()->user();
         //abort_unless($order->user_id == $user->id, 403, 'شما اجازه انجام این عملیات را ندارید.');
@@ -161,6 +162,16 @@ class PaymentController extends Controller
                     'title'=>'',
                     'message'=>'پرداخت شما موفقیت آمیز بود.',
                 ]);
+                if ($order->mobile)
+                {
+                    try
+                    {
+                        send_sms($order->mobile, ['user' => $user->name ?? 'بدون نام', 'ordercode' => $order->id], 636222);
+                    } catch (\Exception $exception)
+                    {
+                        Log::info('Error sending otp: ' . $exception);
+                    }
+                }
 
                 return redirect()->route('thankyou', $order->id);
     		} catch (Exception $ex) {

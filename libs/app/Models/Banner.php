@@ -2,12 +2,44 @@
 
 namespace App\Models;
 
+use App\Traits\LoggableRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class Banner extends Model
 {
+    use LoggableRelations;
+    
     protected $fillable = ['name', 'status', 'position', 'width', 'height'];
+    
+    protected $logRelations = [
+        'items' => ['id', 'title', 'url', 'image', 'content', 'sort_order'],
+    ];
+    
+    protected $logOnly = [
+        'name',
+        'status',
+        'position',
+        'width',
+        'height',
+    ];
+    
+    protected $translations = [
+        'id' => 'آی دی',
+        'title' => 'تایتل',
+        'status' => 'وضعیت',
+        'position' => 'موقعیت',
+        'width' => 'عرض',
+        'height' => 'ارتفاع',
+    ];
+    
+    protected $type = [
+        'title' => 'string',
+        'status' => 'boolean',
+        'position' => 'integer',
+        'width' => 'integer',
+        'height' => 'integer',
+    ];
 
     public function items()
     {

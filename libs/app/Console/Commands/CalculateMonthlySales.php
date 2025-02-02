@@ -41,7 +41,7 @@ class CalculateMonthlySales extends Command
         foreach ($salesData as $data) {
             DB::table('products')
                 ->where('id', $data->product_id)
-                ->updateQuietly(['total_monthly_sales_count' => DB::raw('total_monthly_sales_count + ' . $data->total_quantity_sold)]);
+                ->update(['total_monthly_sales_count' => DB::raw('total_monthly_sales_count + ' . $data->total_quantity_sold)]);
         }
     }
 }

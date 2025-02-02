@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LoggableRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class MenuItems extends Model
 {
+    use LoggableRelations;
+    
     public const STATUS_DRAFT       = false;
     public const STATUS_PUBLISHED   = true;
 
@@ -19,6 +22,44 @@ class MenuItems extends Model
         'parent_id',
         'sort_order',
         'is_active',
+    ];
+    
+    protected $logRelations = [
+        'parent' => ['id', 'name'],
+    ];
+    
+    protected $logOnly = [
+        'heading',
+        'menu_id',
+        'label',
+        'url',
+        'image',
+        'parent_id',
+        'sort_order',
+        'is_active',
+    ];
+    
+    protected $translations = [
+        'id' => 'آی دی',
+        'heading' => 'عنوان',
+        'menu_id' => 'منو',
+        'label' => 'لیبل',
+        'url' => 'لینک',
+        'image' => 'تصویر',
+        'parent_id' => 'والد',
+        'sort_order' => 'ترتیب',
+        'is_active' => 'وضعیت',
+    ];
+    
+    protected $type = [
+        'heading' => 'string',
+        'menu_id' => 'relation',
+        'label' => 'string',
+        'url' => 'string',
+        'image' => 'image',
+        'parent_id' => 'relation',
+        'sort_order' => 'integer',
+        'is_active' => 'boolean',
     ];
 
     /**

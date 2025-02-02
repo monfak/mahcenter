@@ -5,7 +5,7 @@
         <span class="fa fa-pencil"></span> ویرایش
     </a>
     @if($paymentMethod->is_removable)
-    <button type="submit" name="delete" class="btn btn-danger btn-xs">
+    <button type="submit" name="delete" class="btn btn-danger btn-xs" onclick="return confirm('آیا از حذف این روش پرداخت اطمینان دارید؟');">
         <span class="fa fa-trash"></span> حذف
     </button>
     @endif

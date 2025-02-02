@@ -29,18 +29,14 @@
   <div class="modal fade bd-example-modal-lg" id="compare-modal" tabindex="-1" role="dialog" aria-labelledby="compare-modal" aria-hidden="true">
       <div class="modal-dialog compare-modal-content modal-lg"></div>
   </div>
-   
   <article class="post-10066 page type-page status-publish hentry">
     <div class="entry-content content-box">
       <div class="compare-section clearfix">
         <div class="compare-products jsticky">
           <ul class="clearfix">
-              
                @if($products)
-              
                 @php $totalProduct = $products->count() @endphp
-                 @for($i = 0; $i < $totalProduct; $i++)
-             
+                @for($i = 0; $i < $totalProduct; $i++)
              <li class="compare-singleitem">
           <div class="compare-thumbs-container">
             <div class="compare-product-img">
@@ -59,15 +55,14 @@
               </a>
               <span class="woocommerce-Price-amount amount">
                 <bdi>
-                       @if($products[$i]['special'])
-                            <del class="text-danger">{{ number_format($products[$i]['price']) }}</del><br>
-                            <ins class="text-success">{{ number_format($products[$i]['special']) }}</ins>
-                        @else
-                            {{number_format($products[$i]['price']) }} 
-                        @endif
+                   @if($products[$i]['special'])
+                        <del class="text-danger">{{ number_format($products[$i]['price']) }}</del><br>
+                        <ins class="text-success">{{ number_format($products[$i]['special']) }}</ins>
+                    @else
+                        {{number_format($products[$i]['price']) }} 
+                    @endif
                     &nbsp; <span class="woocommerce-Price-currencySymbol">تومان</span>
                 </bdi>
-                
               </span>
               <a class="btn product-dle-btn" href="{{ route('products.show', $products[$i]['slug']) }}">مشاهده و خرید محصول</a>
             </div>
@@ -78,12 +73,8 @@
                <i class="fas fa-times icon-white-close"></i>
             </button>
          </form>
-
         </li>
-        
              @endfor
-            
-            
              @if(count($products) < 4)
             <li class="compare-singleitem compare-newitem ">
               <div class="compare-newitem-container" >
@@ -94,8 +85,6 @@
                   </a>
                 </div>
               </div>
-              
-              
               <div class="dk-button-container">
                 <a class="dk-button blue add_compare" data-toggle="modal" data-target="#productCompareModal">
                   <i class="dk-button-icon dk-button-icon-caretLeft"></i>
@@ -108,7 +97,6 @@
               </div>
             </li>
             @endif
-            
             @else
                <li class="compare-singleitem compare-newitem ">
               <div class="compare-newitem-container" >
@@ -119,8 +107,6 @@
                   </a>
                 </div>
               </div>
-              
-              
               <div class="dk-button-container">
                 <a class="dk-button blue add_compare" data-toggle="modal" data-target="#productCompareModal">
                   <i class="dk-button-icon dk-button-icon-caretLeft"></i>
@@ -132,9 +118,6 @@
                 </a>
               </div>
             </li>
-            
-            
-            
               @endif
           </ul>
         </div>

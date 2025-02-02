@@ -10,15 +10,19 @@ use Illuminate\Support\Str;
 use App\Models\Unit;
 use App\Http\Requests\StoreUnit;
 use App\Http\Requests\UpdateUnit;
+use App\Services\ActivityLogService;
 
 class UnitController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * UnitController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:units-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     /**
@@ -48,6 +52,7 @@ class UnitController extends Controller
     public function store(StoreUnit $request)
     {
         $unit = Unit::create($request->only(['name']));
+        $log = $this->activityLogService->init('واحد', 'created')->prepare($unit)->finalize()->save();
         doneMessage("واحد شمارش $unit->name با موفقیت ایجاد گردید.");
         return redirect()->route('admin.units.index');
     }
@@ -80,9 +85,11 @@ class UnitController extends Controller
      */
     public function update(UpdateUnit $request, $id)
     {
+        $log = $this->activityLogService->init('واحد', 'updated')->prepare($unit, 'old');
         $unit = Unit::findOrFail($id);
         $unit->name = $request->input('name');
         $unit->save();
+        $log->prepare($unit)->finalize()->save();
         doneMessage("$unit->name با موفقیت آپدیت شد.");
         return redirect()->route('admin.units.index');
     }
@@ -98,6 +105,7 @@ class UnitController extends Controller
     {
         $data = $request->all();
         $unit = Unit::findOrFail($id);
+        $log = $this->activityLogService->init('واحد', 'deleted')->prepare($unit, 'old')->finalize()->save();
         if ( isset($data['delete'] ))
         {
             $unit->delete();

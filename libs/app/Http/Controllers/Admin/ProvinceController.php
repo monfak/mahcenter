@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
 use App\Http\Requests\ProvinceRequest;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class ProvinceController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * ProvinceController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:provinces-manage');
+        $this->activityLogService = $activityLogService;
     }
     
     public function index()
@@ -56,6 +60,7 @@ class ProvinceController extends Controller
     {
         $provinceData = $request->only(['name', 'price_large', 'price_small']);
         $province = Province::query()->create($provinceData);
+        $log = $this->activityLogService->init('استان', 'created')->prepare($province)->finalize()->save();
         success('استان ' . $province->name . ' با موفقیت ایجاد شد.');
         return redirect()->route('admin.provinces.index');
     }
@@ -85,8 +90,10 @@ class ProvinceController extends Controller
      */
     public function update(ProvinceRequest $request, Province $province)
     {
+        $log = $this->activityLogService->init('استان', 'updated')->prepare($province, 'old');
         $provinceData = $request->only(['name', 'price_large', 'price_small']);
         $province->update($provinceData);
+        $log->prepare($province)->finalize()->save();
         success('استان ' . $province->name . ' با موفقیت آپدیت شد.');
         return redirect()->route('admin.provinces.index');
     }
@@ -102,6 +109,7 @@ class ProvinceController extends Controller
     {
         $data = $request->all();
         $province = Province::findOrFail($id);
+        $log = $this->activityLogService->init('استان', 'deleted')->prepare($province, 'old')->finalize()->save();
         $province->delete();
         success();
         return redirect()->route('admin.provinces.index');

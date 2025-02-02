@@ -9,15 +9,19 @@ use App\Models\Attribute;
 use App\Models\AttributeGroups;
 use App\Http\Requests\StoreAttribute;
 use App\Http\Requests\UpdateAttribute;
+use App\Services\ActivityLogService;
 
 class AttributeController extends Controller
 {
+    protected $activityLogService;
+    
     /**
      * AttributeController constructor.
      */
-    public function __construct()
+    public function __construct(ActivityLogService $activityLogService)
     {
         $this->middleware('permission:attributes-manage');
+        $this->activityLogService = $activityLogService;
     }
 
     /**
@@ -67,7 +71,7 @@ class AttributeController extends Controller
 
             Attribute::insert($attributes);
         }
-
+        $log = $this->activityLogService->init('خصوصیات', 'created')->prepare($attributeGroup)->finalize()->save();
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -107,6 +111,7 @@ class AttributeController extends Controller
     public function update(UpdateAttribute $request, $id)
     {
         $attributeGroup = AttributeGroups::findOrFail($id);
+        $log = $this->activityLogService->init('خصوصیات', 'updated')->prepare($attributeGroup, 'old');
 
         $attributeGroup->name       = $request->input('group_name');
         $attributeGroup->sort_order = $request->input('group_sort_order');
@@ -149,6 +154,8 @@ class AttributeController extends Controller
             Attribute::insert($attributes);
         }
 
+        $log->prepare($product)->finalize()->save();
+        
         session()->flash('msg', [
             'status' => 'success',
             'title' => '',
@@ -169,8 +176,10 @@ class AttributeController extends Controller
     {
         $data = $request->all();
         $attributeGroup = AttributeGroups::findOrFail($id);
+        
+        $log = $this->activityLogService->init('خصوصیات', 'deleted')->prepare($attributeGroup, 'old')->finalize()->save();
 
-        if ( isset($data['delete'] ))
+        if(isset($data['delete']))
         {
             $attributeGroup->delete();
         }

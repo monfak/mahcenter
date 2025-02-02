@@ -3,6 +3,9 @@
 @section('description', $site_settings['description'])
 @section('styles')
 @if($site_settings['is_festival_active'])
+@foreach($slider as $slide)
+<link rel="preload" as="image" href="{{ asset($slide->image) }}" type="image/webp">
+@endforeach
 <style>
     .festival {
         background: {{ $site_settings['festival_color'] }};
@@ -42,10 +45,10 @@
           <div class="col-12 p-0 slide-col position-relative">
             <div class="owl-carousel owl-theme owl-slider">
                 @foreach($slider as $slide)
-                        <a class="item img-pro-banner" href="{{ $slide->url }}">
-                          <img width="1343" height="280" src="{{ asset($slide->image) }}" class="d-none d-md-block w-100" alt="{{ $slide->heading }}"><!--عکس مناسب دسکتاپ-->
-                          <img width="1343" height="280" src="{{ asset($slide->image) }}" class="d-xl-none d-lg-none d-md-none w-100" alt="{{ $slide->heading }}"><!--عکس مناسب گوشی-->
-                        </a>
+                    <a class="item img-pro-banner" href="{{ $slide->url }}">
+                      <img loading="lazy" width="1343" height="280" style="min-height: 280px;" src="{{ asset($slide->image) }}" class="d-none d-md-block w-100" alt="{{ $slide->heading }}"><!--عکس مناسب دسکتاپ-->
+                      <img loading="lazy" width="1343" height="280" style="min-height: 280px;" src="{{ asset($slide->image) }}" class="d-xl-none d-lg-none d-md-none w-100" alt="{{ $slide->heading }}"><!--عکس مناسب گوشی-->
+                    </a>
                 @endforeach
             </div>
           </div>
@@ -60,7 +63,7 @@
                     <div class="item">
                       <a class="main-img-category position-relative text-center" href="{{ $item->url }}">
                         <div class="logo-category-image">
-                          <img width="144" height="103" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}" />
+                          <img loading="lazy" width="144" height="103" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}" />
                         </div>
                         <div class="layer-category mt-2 mb-2">{{ $item->title }}</div>
                       </a>
@@ -81,10 +84,10 @@
                 <div class="col-md-2 col-5">
                   <div class="row">
                     <div class="col-12 p-0 text-center">
-                      <img src="{{ asset($site_settings['festival_home_title_image']) }}" class="img-fluid" />
+                      <img loading="lazy" src="{{ asset($site_settings['festival_home_title_image']) }}" class="img-fluid" />
                     </div>
                     <div class="col-12 p-0 text-center">
-                      <img src="{{ asset($site_settings['festival_home_image']) }}" class="img-fluid w-100" width="120"/>
+                      <img loading="lazy" src="{{ asset($site_settings['festival_home_image']) }}" class="img-fluid w-100" width="120"/>
                     </div>
                   </div>
                   <div class="row">
@@ -116,7 +119,7 @@
                               <div class="col-12">
                                 <div class="img-pro position-relative">
                                   <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="position-relative">
-                                    <img width="185" height="130" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}"/>
+                                    <img loading="lazy" width="185" height="130" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}"/>
                                   </a>
                                 </div>
                               </div>
@@ -173,10 +176,10 @@
                 <div class="col-md-2 col-5">
                   <div class="row">
                     <div class="col-12 p-0 text-center">
-                      <img src="{{ asset('new-theme/images/Amazings.svg') }}" width="120" height="120" class="img-fluid w-100" />
+                      <img loading="lazy" src="{{ asset('new-theme/images/Amazings.svg') }}" width="120" height="120" class="img-fluid" alt="محصولات شگفت انگیز"/>
                     </div>
                     <div class="col-12 p-0 text-center">
-                      <img src="{{ asset('images/amazing.png') }}" class="img-fluid w-100" height="120" width="120"/>
+                      <img loading="lazy" src="{{ asset('images/amazing-products.png') }}" class="img-fluid" height="120" width="120" alt="شگفت انگیزهای پرتخفیف"/>
                     </div>
                   </div>
                   <div class="row">
@@ -215,7 +218,7 @@
                               <div class="col-12">
                                 <div class="img-pro position-relative">
                                   <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="position-relative">
-                                    <img src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}" width="185" height="130"/>
+                                    <img loading="lazy" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}" width="185" height="130"/>
                                   </a>
                                 </div>
                               </div>
@@ -269,10 +272,10 @@
                   <div class="d-md-flex flex-item">
                     <div class="d-flex align-items-center">
                       <div>
-                        <img src="{{ asset('images/fresh.png?v=0.0.1') }}" class="img-fluid w-100" width="66" height="64" />
+                        <img loading="lazy" src="{{ asset('images/fresh.png?v=0.0.1') }}" class="img-fluid w-100" width="66" height="64" />
                       </div>
                       <div class="ms-2 me-2">
-                        <img width="237" height="24" src="{{ asset('images/warranties-heading.png?v=0.0.1') }}" class="img-fluid w-100" style="width:40%"/>
+                        <img loading="lazy" width="237" height="24" src="{{ asset('images/warranties-heading.png?v=0.0.1') }}" class="img-fluid w-100" style="width:40%"/>
                       </div>
                     </div>
                     {{--<div>
@@ -285,7 +288,7 @@
                     <div class="d-flex flex-pro">
                         @foreach($warranties as $warranty)
                         <a href="{{ route('frontend.warranties.show', $warranty->slug) }}">
-                            <img width="58" height="58" src="{{ asset($warranty->logo) }}" class="img-fluid w-100" alt="{{ $warranty->name }}" />
+                            <img loading="lazy" width="58" height="58" src="{{ asset($warranty->logo) }}" class="img-fluid w-100" alt="{{ $warranty->name }}" />
                             {{--<span class="price-discount-percent">62%</span>--}}
                         </a>
                         @endforeach
@@ -310,7 +313,7 @@
                 @foreach($belowSupermarket->orderedItems as $item)
                     <div class="col-md-3 col-6 mt-xs-15 ps-2 pe-2">
                         <a href="{{ $item->url }}" class="d-block text-center">
-                            <img width="320" height="240" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}" />
+                            <img loading="lazy" width="320" height="240" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}" />
                         </a>
                     </div>
                 @endforeach
@@ -331,8 +334,8 @@
                 @foreach($latestProducts as $product)
                 <div class="item">
                   <a class="inline-bllock" href="{{ route('products.show', $product->slug) }}" title="{{ $product->name }}">
-                    {{--<img src="{{ asset(image_aspect($product->image, ['height' => 100])) }}" class="img-fluid" alt="{{ $product->name }}" />--}}
-                    <img width="155" height="100" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}" />
+                    {{--<img loading="lazy" src="{{ asset(image_aspect($product->image, ['height' => 100])) }}" class="img-fluid" alt="{{ $product->name }}" />--}}
+                    <img loading="lazy" width="155" height="100" src="{{ asset($product->image) }}" class="img-fluid w-100" alt="{{ $product->alt }}" />
                   </a>
                 </div>
                 @endforeach
@@ -349,7 +352,7 @@
                 @foreach($items as $item)
                 <div class="col-md-6 col-12 ps-2 pe-2 mb-3">
                     <a href="{{ $item->url }}" class="d-block">
-                        <img width="648" height="270" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}">
+                        <img loading="lazy" width="648" height="270" src="{{ asset($item->image) }}" class="img-fluid w-100" alt="{{ $item->title }}">
                     </a>
                 </div>
                 @endforeach
@@ -371,7 +374,7 @@
                     <div class="grid grid-pro">
                         @foreach($lane['products'] as $product)
                         <a href="{{ route('products.show', $product->slug) }}" target="_blank">
-                            <img width="114" height="114" class="img-fluid mx-auto w-100" alt="{{ $product->alt }}" src="{{ asset($product->image) }}" >
+                            <img loading="lazy" width="114" height="114" class="img-fluid mx-auto w-100" alt="{{ $product->alt }}" src="{{ asset($product->image) }}" >
                         </a>
                         @endforeach
                     </div>
@@ -403,7 +406,7 @@
                 @foreach($manufacturers as $manufacturer)
                 <div class="item">
                   <a class="inline-bllock" href="{{ route('manufacturers.show', $manufacturer->slug) }}" title="{{ $manufacturer->name }}">
-                    <img width="155" height="100" src="{{ asset($manufacturer->logo) }}" class="img-fluid w-100" alt="{{ $manufacturer->name }}"/>
+                    <img loading="lazy" width="155" height="100" src="{{ asset($manufacturer->logo) }}" class="img-fluid w-100" alt="{{ $manufacturer->name }}"/>
                   </a>
                 </div>
                 @endforeach
@@ -428,7 +431,7 @@
                     @foreach($products as $product)
                     <a class="d-flex" href="{{ route('products.show', $product->slug) }}" target="_blank">
                         <div class="flex-img">
-                            <img width="78" height="78" src="{{ asset($product->image ) }}" class="img-fluid w-100" alt="{{ $product->alt }}"/>
+                            <img loading="lazy" width="78" height="78" src="{{ asset($product->image ) }}" class="img-fluid w-100" alt="{{ $product->alt }}"/>
                         </div>
                         <span class="counter-item">{{ $loop->iteration + ($loop->parent->index * 3) }}</span>
                         <div class="flex-pro position-relative">
@@ -457,7 +460,7 @@
                     <div class="grid grid-pro">
                         @foreach($recommend['products'] as $product)
                         <a href="{{ route('products.show', $product->slug) }}" target="_blank">
-                            <img width="114" height="114" class="img-fluid mx-auto w-100" src="{{ asset($product->image) }}" alt="{{ $product->alt }}">
+                            <img loading="lazy" width="114" height="114" class="img-fluid mx-auto w-100" src="{{ asset($product->image) }}" alt="{{ $product->alt }}">
                         </a>
                         @endforeach
                     </div>
@@ -494,7 +497,7 @@
                 <div class="item position-relative">
                   <div class="item-img position-relative">
                     <div class="d-block img-special">
-                      <img width="404" height="224" class="w-100" src="{{ asset(image_resize($article->image, ['width' => 404, 'height' => 224])) }}" alt="{{ $article->title }}" />
+                      <img loading="lazy" width="404" height="224" class="w-100" src="{{ asset(image_resize($article->image, ['width' => 404, 'height' => 224])) }}" alt="{{ $article->title }}" />
                     </div>
                     <a href="{{ route($article->id > 147 ? 'frontend.blog.show' : 'articles.show', $article->slug) }}" class="layer-item" target="_blank">
                       <div class="item-layer">

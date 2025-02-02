@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\LoggableRelations;
 use App\Observers\ArticleObserver;
 use Illuminate\Database\Eloquent\Model;
 
 #[ObservedBy([ArticleObserver::class])]
 class Article extends Model
 {
+    use LoggableRelations;
+    
     protected $fillable = [
         'user_id',
         'title',
@@ -30,6 +33,80 @@ class Article extends Model
         'top_product_id',
         'middle_product_id',
         'bottom_product_id',
+    ];
+    
+    protected $logRelations = [
+        'user' => ['id', 'name'],
+        'category' => ['id', 'name', 'slug'],
+        'faqs' => ['id', 'name'],
+        'products' => ['id', 'name', 'slug'],
+        'relates' => ['id', 'title', 'slug'],
+    ];
+    
+    protected $logOnly = [
+        'title',
+        'slug',
+        'image',
+        'content',
+        'meta_keywords',
+        'meta_description',
+        'og_image',
+        'twitter_title',
+        'twitter_description',
+        'twitter_image',
+        'canonical',
+        'is_nofollow',
+        'is_noindex',
+        'is_suggested',
+        'status',
+    ];
+    
+    protected $translations = [
+        'id' => 'آی دی',
+        'title' => 'تایتل',
+        'slug' => 'اسلاگ',
+        'image' => 'تصویر شاخص',
+        'content' => 'محتوا',
+        'meta_keywords' => 'متاکیوردز',
+        'meta_description' => 'متادسکریپشن',
+        'og_image' => 'تصویر اپن گراف',
+        'twitter_title' => 'تایتل توئیتر',
+        'twitter_description' => 'دسکریپشن توئیتر',
+        'twitter_image' => 'تصویر توئیتر',
+        'canonical' => 'کنونیکال',
+        'is_nofollow' => 'نوفالو است',
+        'is_noindex' => 'نوایندکس است',
+        'is_suggested' => 'پیشنهاد سردبیر',
+        'status' => 'وضعیت انتشار',
+        'user' => 'نویسنده',
+        'category' => 'دسته بندی',
+        'faqs' => 'سوالات متداول',
+        'products' => 'محصولات مرتبط',
+        'relates' => 'مقالات مرتبط',
+        
+    ];
+    
+    protected $type = [
+        'user_id' => 'relation',
+        'title' => 'string',
+        'slug' => 'string',
+        'image' => 'image',
+        'content' => 'string',
+        'category_id' => 'relation',
+        'meta_keywords' => 'string',
+        'meta_description' => 'string',
+        'og_image' => 'image',
+        'twitter_title' => 'string',
+        'twitter_description' => 'string',
+        'twitter_image' => 'image',
+        'canonical' => 'string',
+        'is_nofollow' => 'boolean',
+        'is_noindex' => 'boolean',
+        'is_suggested' => 'boolean',
+        'status' => 'boolean',
+        'top_product_id' => 'relation',
+        'middle_product_id' => 'relation',
+        'bottom_product_id' => 'relation',
     ];
     
     /**

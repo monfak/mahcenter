@@ -449,6 +449,31 @@ $(document).ready(function () {
             </div>
             <div class="box box-default">
                 <div class="box-header with-border">
+                    <h3 class="box-title">آخرین کاربران</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-۱۲">
+                            <ul class="nav nav-pills nav-stacked">
+                                @foreach($latestUsers as $user)
+                                <li>
+                                    <a href="{{ route('admin.users.edit', $user->id) }}">
+                                        {{ $user->name ?? 'بدون نام' }}
+                                        <span class="pull-right text-success">{{ $user->mobile }}</span>
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-header with-border">
                     <h3 class="box-title">وضعیت سیستم</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>

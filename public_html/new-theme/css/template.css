@@ -37,6 +37,7 @@ a {
   font-family: "IRANSansWeb";
   font-style: normal;
   font-weight: 900;
+  font-display: swap;
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot");
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot?#iefix")
       format("embedded-opentype"),
@@ -52,6 +53,7 @@ a {
   font-family: "IRANSansWeb";
   font-style: normal;
   font-weight: bold;
+  font-display: swap;
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot");
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot?#iefix")
       format("embedded-opentype"),
@@ -67,6 +69,7 @@ a {
   font-family: "IRANSansWeb";
   font-style: normal;
   font-weight: 500;
+  font-display: swap;
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot");
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot?#iefix")
       format("embedded-opentype"),
@@ -82,6 +85,7 @@ a {
   font-family: "IRANSansWeb";
   font-style: normal;
   font-weight: 300;
+  font-display: swap;
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot");
   src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot?#iefix")
       format("embedded-opentype"),
@@ -97,6 +101,7 @@ a {
   font-family: "IRANSansWeb";
   font-style: normal;
   font-weight: 200;
+  font-display: swap;
   src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot");
   src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot?#iefix")
       format("embedded-opentype"),
@@ -3237,7 +3242,7 @@ a:hover {
 }
 .wa__popup_chat_box .wa__stt::after {
   content: "";
-  background: url("../images/whatsapp_logo_green.svg") 100% 0 no-repeat;
+  /*background: url("../images/whatsapp_logo_green.svg") 100% 0 no-repeat;*/
   background-size: auto;
   position: absolute;
   left: 14px;
@@ -3288,7 +3293,7 @@ a:hover {
 }
 .wa__popup_chat_box .wa__stt::after {
   content: "";
-  background: url("../images/whatsapp_logo_green.svg") 100% 0 no-repeat;
+  /*background: url("../images/whatsapp_logo_green.svg") 100% 0 no-repeat;*/
   background-size: auto;
   position: absolute;
   left: 14px;
@@ -3327,7 +3332,7 @@ a:hover {
 }
 .wa__popup_chat_box .wa__popup_heading::before {
   content: "";
-  background: url("../images/whatsapp_logo.svg") center top no-repeat;
+  /*background: url("../images/whatsapp_logo.svg") center top no-repeat;*/
   background-size: auto;
   background-size: 33px;
   display: block;
@@ -4990,7 +4995,7 @@ article p {
 #productCompareModal .modal-header{padding:15px;border-bottom:1px solid #dedede;padding:19px 37px 20px 63px}
 #productModalLongTitle h5{font-weight:400;font-size:14px;line-height:0}
 #keyword::before{content:"\E090";position:absolute;right:15px;top:13px;font-size:17px;}
-#keyword{border-radius:11px;border:1px solid #e3e3e3 !important;color:#717171;font-size:14px;line-height:1.571;padding:11px 12px;width:60%;display:table-column-group;float:right;height:45px;border-left-width:0}
+#keyword{border-radius:11px;border:none;color:#717171;font-size:14px;line-height:1.571;padding:11px 12px;width:60%;display:table-column-group;float:right;height:45px;border-left-width:0}
 #productModalLongTitle{display:block;float:right;line-height:41px;padding-left:40px;color:#2b2e38;font-size:20px}
 #brand{border:1px solid #e3e3e3;-ms-box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;width:20%;height:45px;font-size:16px;color:#888;padding-right:10px;border-radius:11px 0 0 11px}
 #productCompareModal .close{display:block;position:absolute;left:20px;top:20px;opacity:1;text-shadow:none}

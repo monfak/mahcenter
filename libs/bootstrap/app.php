@@ -41,7 +41,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        if (request()->has('developer_token'))
+        $allowedIps = ['5.202.168.55'] ;
+        if (request()->has('developer_token') || in_array(request()->ip(), $allowedIps))
         {
             config(['app.debug' => true]);
         }
